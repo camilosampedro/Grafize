@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
 public class Ventana extends JFrame {
@@ -76,6 +77,7 @@ public class Ventana extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 cell = graphComponent.getCellAt(e.getX(), e.getY());
+//                System.out.println(mxConstants.STYLE_EDITABLE);
             }
         });
     }

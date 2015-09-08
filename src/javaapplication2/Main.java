@@ -5,6 +5,8 @@
  */
 package javaapplication2;
 
+import gui.VentanaEsquema;
+
 /**
  *
  * @author camilo.sampedro
@@ -12,11 +14,11 @@ package javaapplication2;
 public class Main {
 
     /**
-     * @param args the command line arguments
+     * @param argumentos No recibe argumentos
      */
-    public static void main(String[] args) {
+    public static void main(String[] argumentos) {
         // TODO code application logic here
-        Ventana ventana = new Ventana();
+        VentanaEsquema ventana = new VentanaEsquema();
         ventana.setVisible(true);
     }
     
