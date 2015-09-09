@@ -32,7 +32,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
      */
     public VentanaEsquema() {
         initComponents();
-        panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
+//        panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
 //        graphComponent = new mxGraphComponent(graph);
         //graphComponent.setPreferredSize(new Dimension(670, 380));
 //        panelGrafo.add(graphComponent);
@@ -70,25 +70,14 @@ public class VentanaEsquema extends javax.swing.JFrame {
         setTitle("Grafize");
 
         panelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
+        panelGrafo.setLayout(new java.awt.GridLayout());
         graph = new mxGraph();
         hash = new HashMap();
         graphComponent = new mxGraphComponent(graph);
-        graphComponent.setPreferredSize(new Dimension(500,500));
-        panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
-        System.out.println("Size:" + panelGrafo.getSize());
+        //graphComponent.setPreferredSize(new Dimension(500,500));
+        //panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
+        //System.out.println("Size:" + panelGrafo.getSize());
         panelGrafo.add(graphComponent);
-
-        javax.swing.GroupLayout panelGrafoLayout = new javax.swing.GroupLayout(panelGrafo);
-        panelGrafo.setLayout(panelGrafoLayout);
-        panelGrafoLayout.setHorizontalGroup(
-            panelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
-        );
-        panelGrafoLayout.setVerticalGroup(
-            panelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 397, Short.MAX_VALUE)
-        );
 
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -117,9 +106,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -135,12 +123,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
                             .addComponent(tfNombre)
                             .addComponent(jcbTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -164,7 +152,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         System.out.println("Presionó");
         graph.getModel().beginUpdate();
         Object parent = graph.getDefaultParent();
-        Object v1 = graph.insertVertex(parent, null, tfNombre.getText() , 100, 30, 150, 70, mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#616161;" + mxConstants.STYLE_SPACING + "=5;" +mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_ELLIPSE +"; "+ mxConstants.STYLE_PERIMETER + mx);
+        Object v1 = graph.insertVertex(parent, null, tfNombre.getText() , 100, 30, 150, 70, mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#616161;" + mxConstants.STYLE_SPACING + "=5;" +mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_ELLIPSE +"; "+ mxConstants.STYLE_PERIMETER);
         Object v2 = graph.insertVertex(parent, null, jcbTipo.getSelectedItem(), 300, 30, 100, 50, mxConstants.STYLE_ROUNDED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#9E9E9E;"+mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_CLOUD);
         Object e1 = graph.insertEdge(parent, null, null, v1, v2, mxConstants.STYLE_DASHED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=green");
         hash.put("", v1);
