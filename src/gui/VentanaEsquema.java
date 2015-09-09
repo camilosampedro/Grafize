@@ -9,18 +9,13 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import java.util.Hashtable;
-import javaapplication2.AgregarGrafo;
-import javax.swing.JTextPane;
 
 /**
  *
- * @author camilosampedro
+ * @author Camilo Sampedro
  */
 public class VentanaEsquema extends javax.swing.JFrame {
 
@@ -31,15 +26,11 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private Object cell;
 
     /**
-     * Creates new form VentanaGrafo
+     * Crea una nueva ventana de grafo.
      */
     public VentanaEsquema() {
         initComponents();
         inicializarEstilo();
-//        panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
-//        graphComponent = new mxGraphComponent(graph);
-        //graphComponent.setPreferredSize(new Dimension(670, 380));
-//        panelGrafo.add(graphComponent);
 
         graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
 
@@ -201,28 +192,42 @@ public class VentanaEsquema extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Agregar nodo al grafo.
+     *
+     * @param texto Texto que irá en el nodo del grafo.
+     * @param tipo Tipo del nodo del grafo.
+     */
     public void agregarNodo(String texto, String tipo) {
-        JTextPane componente = new JTextPane();
-        componente.setContentType("text/html"); // NOI18N
-//        componente.setText();
         graph.getModel().beginUpdate();
         Object parent = graph.getDefaultParent();
-        Object v1 = graph.insertVertex(parent, null, texto + "\n<" + tipo + ">", 100, 30, 150, 70, "Nodo");
+        Object v1 = graph.insertVertex(parent, null, texto + "\n<" + tipo + ">",
+                randX(), randY(), 150, 70, "Nodo");
         hash.put(texto, v1);
         graph.getModel().endUpdate();
     }
 
+    public int randX() {
+        int numero = (int) (Math.random() * (panelGrafo.getSize().width - 150)) + 100;
+        System.out.println(numero);
+        return numero;
+    }
+
+    public int randY() {
+        return (int) (Math.random() * (panelGrafo.getSize().height - 150)) + 100;
+    }
+
     public static void inicializarEstilo() {
         mxStylesheet stylesheet = graph.getStylesheet();
-        Hashtable<String, Object> style = new Hashtable<>();
-        style.put(mxConstants.STYLE_STROKECOLOR, "#9E9E9E");
-        style.put(mxConstants.STYLE_FONTCOLOR, "#F5F5F5");
-        style.put(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
+        HashMap<String, Object> style = new HashMap<>();
+        style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
+        style.put(mxConstants.STYLE_STROKECOLOR, "#380B61");
+        style.put(mxConstants.STYLE_FONTCOLOR, "#380B61");
+//        style.put(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
         style.put(mxConstants.STYLE_EDITABLE, 0);
         style.put(mxConstants.STYLE_FONTSIZE, 14);
-        style.put(mxConstants.STYLE_FILLCOLOR, "#616161");
+        style.put(mxConstants.STYLE_FILLCOLOR, "#D8CEF6");
         style.put(mxConstants.STYLE_SPACING, 5);
-        style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
         stylesheet.putCellStyle("Nodo", style);
     }
 
