@@ -8,12 +8,15 @@ package gui;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxStylesheet;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.Hashtable;
 import javaapplication2.AgregarGrafo;
+import javax.swing.JTextPane;
 
 /**
  *
@@ -32,6 +35,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
      */
     public VentanaEsquema() {
         initComponents();
+        inicializarEstilo();
 //        panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
 //        graphComponent = new mxGraphComponent(graph);
         //graphComponent.setPreferredSize(new Dimension(670, 380));
@@ -70,7 +74,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         setTitle("Grafize");
 
         panelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelGrafo.setLayout(new java.awt.GridLayout());
+        panelGrafo.setLayout(new java.awt.GridLayout(1, 0));
         graph = new mxGraph();
         hash = new HashMap();
         graphComponent = new mxGraphComponent(graph);
@@ -149,14 +153,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-        System.out.println("Presionó");
-        graph.getModel().beginUpdate();
-        Object parent = graph.getDefaultParent();
-        Object v1 = graph.insertVertex(parent, null, tfNombre.getText() , 100, 30, 150, 70, mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#616161;" + mxConstants.STYLE_SPACING + "=5;" +mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_ELLIPSE +"; "+ mxConstants.STYLE_PERIMETER);
-        Object v2 = graph.insertVertex(parent, null, jcbTipo.getSelectedItem(), 300, 30, 100, 50, mxConstants.STYLE_ROUNDED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#9E9E9E;"+mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_CLOUD);
-        Object e1 = graph.insertEdge(parent, null, null, v1, v2, mxConstants.STYLE_DASHED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=green");
-        hash.put("", v1);
-        graph.getModel().endUpdate();
+        agregarNodo(tfNombre.getText(), (String) jcbTipo.getSelectedItem());
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -204,6 +201,31 @@ public class VentanaEsquema extends javax.swing.JFrame {
         });
     }
 
+    public void agregarNodo(String texto, String tipo) {
+        JTextPane componente = new JTextPane();
+        componente.setContentType("text/html"); // NOI18N
+//        componente.setText();
+        graph.getModel().beginUpdate();
+        Object parent = graph.getDefaultParent();
+        Object v1 = graph.insertVertex(parent, null, texto + "\n<" + tipo + ">", 100, 30, 150, 70, "Nodo");
+        hash.put(texto, v1);
+        graph.getModel().endUpdate();
+    }
+
+    public static void inicializarEstilo() {
+        mxStylesheet stylesheet = graph.getStylesheet();
+        Hashtable<String, Object> style = new Hashtable<>();
+        style.put(mxConstants.STYLE_STROKECOLOR, "#9E9E9E");
+        style.put(mxConstants.STYLE_FONTCOLOR, "#F5F5F5");
+        style.put(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
+        style.put(mxConstants.STYLE_EDITABLE, 0);
+        style.put(mxConstants.STYLE_FONTSIZE, 14);
+        style.put(mxConstants.STYLE_FILLCOLOR, "#616161");
+        style.put(mxConstants.STYLE_SPACING, 5);
+        style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
+        stylesheet.putCellStyle("Nodo", style);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnEliminar;
@@ -213,4 +235,17 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private javax.swing.JPanel panelGrafo;
     private javax.swing.JTextField tfNombre;
     // End of variables declaration//GEN-END:variables
+
+    private String obtenerHTML(String texto) {
+        return "<!DOCTYPE html>\n"
+                + "<html lang=\"en\">\n"
+                + "  <head>\n"
+                + "    <meta charset=\"utf-8\">\n"
+                + "    <title>title</title>\n"
+                + "  </head>\n"
+                + "  <body>\n"
+                + texto + "\n"
+                + "</body>\n"
+                + "</html>";
+    }
 }
