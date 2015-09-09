@@ -87,7 +87,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         );
         panelGrafoLayout.setVerticalGroup(
             panelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 246, Short.MAX_VALUE)
+            .addGap(0, 397, Short.MAX_VALUE)
         );
 
         btnAgregar.setText("Agregar");
@@ -140,8 +140,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelGrafo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -164,14 +164,20 @@ public class VentanaEsquema extends javax.swing.JFrame {
         System.out.println("Presionó");
         graph.getModel().beginUpdate();
         Object parent = graph.getDefaultParent();
-        Object v1 = graph.insertVertex(parent, null, tfNombre.getText() + "; " + jcbTipo.getSelectedItem(), 330, 30, 100, 50, mxConstants.STYLE_ROUNDED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#9E9E9E");
+        Object v1 = graph.insertVertex(parent, null, tfNombre.getText() , 100, 30, 150, 70, mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#616161;" + mxConstants.STYLE_SPACING + "=5;" +mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_ELLIPSE +"; "+ mxConstants.STYLE_PERIMETER + mx);
+        Object v2 = graph.insertVertex(parent, null, jcbTipo.getSelectedItem(), 300, 30, 100, 50, mxConstants.STYLE_ROUNDED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=#9E9E9E;" + mxConstants.STYLE_FONTCOLOR + "=#F5F5F5;" + mxConstants.STYLE_FONTSTYLE + "=" + mxConstants.FONT_BOLD + ";" + mxConstants.STYLE_EDITABLE + " =0;" + mxConstants.STYLE_FONTSIZE + "=14;fillColor=#9E9E9E;"+mxConstants.STYLE_SHAPE + "="+ mxConstants.SHAPE_CLOUD);
+        Object e1 = graph.insertEdge(parent, null, null, v1, v2, mxConstants.STYLE_DASHED + "=true;" + mxConstants.STYLE_STROKECOLOR + "=green");
         hash.put("", v1);
         graph.getModel().endUpdate();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        graph.getModel().remove(cell);
+        if (graph.getModel().getEdgeCount(cell) > 0) {
+            System.out.println("Tiene más de un vértice");
+            graph.getModel().remove(cell);
+        }
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
