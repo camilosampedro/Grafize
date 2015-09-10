@@ -5,13 +5,23 @@
  */
 package gui;
 
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.model.mxGraphModel.mxValueChange;
+import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxGraphSelectionModel;
 import com.mxgraph.view.mxStylesheet;
+import com.sun.media.jfxmedia.logging.Logger;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,11 +29,36 @@ import java.util.HashMap;
  */
 public class VentanaEsquema extends javax.swing.JFrame {
 
-    protected static mxGraph graph;
+    /**
+     * Objeto con la información del grafo.
+     */
+    protected static mxGraph grafo;
+    /**
+     * Hash en el que se guardará ( String nombre nodo -> Object vértice nodo )
+     * según se vayan insertando estos al grafo.
+     */
     protected static HashMap hash;
+    /**
+     * Componente gráfico del grafo. Aquí se hacen las actualizaciones gráficas
+     * y se puede obtener información gráfica del grafo y de los nodos.
+     */
     private mxGraphComponent graphComponent;
+    /**
+     * Identificador del "style" para obtener el diseño de los nodos dimensión.
+     */
+    public static final String ESTILO_DIMENSION = "EstiloDimension";
+    /**
+     * Identificador del "style" para obtener el diseño de los nodos hecho.
+     */
+    public static final String ESTILO_HECHO = "EstiloHecho";
 
-    private Object cell;
+    /**
+     * Última celda (Vértice o lado) a la que se le hizo clic. Usado para
+     * verificar qué celda eliminar, sabiendo que fue la última a la que se le
+     * hizo clic. Si no hay ninguna celda seleccionada, este valor será nulo y
+     * ninguna será eliminada.
+     */
+    private mxCell cell;
 
     /**
      * Crea una nueva ventana de grafo.
@@ -32,16 +67,43 @@ public class VentanaEsquema extends javax.swing.JFrame {
         initComponents();
         inicializarEstilo();
 
-        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+        grafo.getModel().addListener(mxEvent.CHANGE, (Object sender, mxEventObject evt) -> {
+            //            mxIGraphModel.mxAtomicGraphModelChange[] eventos = (mxIGraphModel.mxAtomicGraphModelChange[]) sender;
+            System.out.println("0000000" + sender);
+            for (String propiedad : evt.getProperties().keySet()) {
+                if (evt.getProperties().get(propiedad) instanceof mxGraphModel.mxValueChange) {
+                    mxGraphModel.mxValueChange evento = (mxGraphModel.mxValueChange) evt.getProperties().get(propiedad);
+                    System.out.println(evento.toString());
+                    System.out.println(propiedad + ": " + evt.getProperties().get(propiedad));
+                } else {
+                    System.out.println("NO: " + evt.getProperties().get(propiedad));
+                }
+            }
 
+//            mxGraphSelectionModel selection = (mxGraphSelectionModel) sender;
+//            if (!selection.isEmpty()) {
+//                mxCell celda = (mxCell) selection.getCell();
+//                if (celda.isEdge()) {
+//                    System.out.println("Celda: " + celda.getValue());
+//                }
+//            } else {
+//                System.out.println("Celda vacía");
+//                mxCell celda = (mxCell) selection.getCell();
+//                if (celda.isEdge()) {
+//                    System.out.println("Celda: " + celda.getValue());
+//                }
+//            }
+        });
+
+        // Evento para controlar qué celda tiene el último clic que se hizo. 
+        // (Qué celda está seleccionada).
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                cell = graphComponent.getCellAt(e.getX(), e.getY());
-//                System.out.println(mxConstants.STYLE_EDITABLE);
+                cell = (mxCell) graphComponent.getCellAt(e.getX(), e.getY());
             }
         });
-        this.repaint();
-        update(panelGrafo.getGraphics());
+
     }
 
     /**
@@ -54,30 +116,33 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private void initComponents() {
 
         panelGrafo = new javax.swing.JPanel();
-        btnAgregar = new javax.swing.JButton();
+        btnAgregarDimension = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jcbTipo = new javax.swing.JComboBox();
-        tfNombre = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        jlNombre = new javax.swing.JLabel();
+        tfIngresadorNombre = new javax.swing.JTextField();
+        btnAgregarHecho = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Grafize");
+        setTitle("Grafize - Ingresar esquema");
 
         panelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelGrafo.setLayout(new java.awt.GridLayout(1, 0));
-        graph = new mxGraph();
+        grafo = new mxGraph();
         hash = new HashMap();
-        graphComponent = new mxGraphComponent(graph);
+        graphComponent = new mxGraphComponent(grafo);
         //graphComponent.setPreferredSize(new Dimension(500,500));
         //panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
         //System.out.println("Size:" + panelGrafo.getSize());
         panelGrafo.add(graphComponent);
 
-        btnAgregar.setText("Agregar");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarDimension.setText("Agregar dimensión");
+        btnAgregarDimension.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+                btnAgregarDimensionActionPerformed(evt);
             }
         });
 
@@ -88,73 +153,81 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Nombre:");
+        jlNombre.setText("Nombre:");
 
-        jcbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Entero", "Decimal", "Texto" }));
+        btnAgregarHecho.setText("Agregar hecho");
+        btnAgregarHecho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarHechoActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Tipo:");
+        jMenu1.setText("Grafo");
+
+        jMenuItem1.setText("Make onto");
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(btnAgregarDimension, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgregarHecho)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel1)
-                                .addGap(2, 2, 2))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfNombre)
-                            .addComponent(jcbTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(22, 22, 22)
+                        .addComponent(jlNombre)
+                        .addGap(2, 2, 2)
+                        .addComponent(tfIngresadorNombre)))
                 .addContainerGap())
             .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(tfIngresadorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlNombre))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
-                    .addComponent(btnEliminar))
+                    .addComponent(btnAgregarDimension)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnAgregarHecho))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    private void btnAgregarDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarDimensionActionPerformed
         // TODO add your handling code here:
-        agregarNodo(tfNombre.getText(), (String) jcbTipo.getSelectedItem());
-    }//GEN-LAST:event_btnAgregarActionPerformed
+        agregarNodo(tfIngresadorNombre.getText(), ESTILO_DIMENSION);
+    }//GEN-LAST:event_btnAgregarDimensionActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        if (graph.getModel().getEdgeCount(cell) > 0) {
-            System.out.println("Tiene más de un vértice");
-            graph.getModel().remove(cell);
-        }
-
+        eliminarNodosSeleccionados();
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnAgregarHechoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHechoActionPerformed
+        // TODO add your handling code here:
+        agregarNodo(tfIngresadorNombre.getText(), ESTILO_HECHO);
+    }//GEN-LAST:event_btnAgregarHechoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,49 +269,88 @@ public class VentanaEsquema extends javax.swing.JFrame {
      * Agregar nodo al grafo.
      *
      * @param texto Texto que irá en el nodo del grafo.
-     * @param tipo Tipo del nodo del grafo.
+     * @param estilo Estilo según del nodo del grafo.
      */
-    public void agregarNodo(String texto, String tipo) {
-        graph.getModel().beginUpdate();
-        Object parent = graph.getDefaultParent();
-        Object v1 = graph.insertVertex(parent, null, texto + "\n<" + tipo + ">",
-                randX(), randY(), 150, 70, "Nodo");
+    public void agregarNodo(String texto, String estilo) {
+        if ("".equals(texto.replaceAll("\\s", ""))) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un nombre para el nuevo nodo", "Nombre vacío", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (hash.containsKey(texto)) {
+            JOptionPane.showMessageDialog(this, "El nodo \"" + texto + "\" ya existe, por favor ingrese un nombre diferente", "Nombre ya existe", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        grafo.getModel().beginUpdate();
+        Object parent = grafo.getDefaultParent();
+        Object v1 = grafo.insertVertex(parent, null, texto,
+                randX(), randY(), 100, 60, estilo);
         hash.put(texto, v1);
-        graph.getModel().endUpdate();
+        grafo.getModel().endUpdate();
+        tfIngresadorNombre.setText("");
     }
 
+    /**
+     * Obtiene un valor aleatorio para insertar en X un nodo.
+     *
+     * @return Número aleatorio entre 0 y ancho - 150
+     */
     public int randX() {
-        int numero = (int) (Math.random() * (panelGrafo.getSize().width - 150)) + 100;
-        System.out.println(numero);
-        return numero;
+        return (int) (Math.random() * (panelGrafo.getSize().width - 150));
     }
 
     public int randY() {
-        return (int) (Math.random() * (panelGrafo.getSize().height - 150)) + 100;
+        return (int) (Math.random() * (panelGrafo.getSize().height - 150));
     }
 
+    /**
+     * Inicializa los estilos para los nuevos nodos ingresados al grafo. (Forma,
+     * colores, editabilidad, espaciado, ...). El estilo se guardará como
+     * ESTILO_NODO
+     */
     public static void inicializarEstilo() {
-        mxStylesheet stylesheet = graph.getStylesheet();
-        HashMap<String, Object> style = new HashMap<>();
-        style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
-        style.put(mxConstants.STYLE_STROKECOLOR, "#380B61");
-        style.put(mxConstants.STYLE_FONTCOLOR, "#380B61");
-//        style.put(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
-        style.put(mxConstants.STYLE_EDITABLE, 0);
-        style.put(mxConstants.STYLE_FONTSIZE, 14);
-        style.put(mxConstants.STYLE_FILLCOLOR, "#D8CEF6");
-        style.put(mxConstants.STYLE_SPACING, 5);
-        stylesheet.putCellStyle("Nodo", style);
+        // Crear un nuevo objeto de estilos
+        mxStylesheet hojaDeEstilos = grafo.getStylesheet();
+        // Hash para los estilos, de la forma ("Propiedad"->Valor)
+        // Las propiedades se encuentran en mxConstants.STYLE_*
+        HashMap<String, Object> hashEstiloDimension = new HashMap<>();
+        HashMap<String, Object> hashEstiloHecho = null;
+        // Forma del nodo
+        hashEstiloDimension.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
+        // El nuevo nodo no será editable 
+        // (No se podrá modificar el texto por la interfaz)
+//        hashEstiloDimension.put(mxConstants.STYLE_EDITABLE, 0);
+        // Tamaño de la fuente
+        hashEstiloDimension.put(mxConstants.STYLE_FONTSIZE, 14);
+        // Quebrar la línea al no caber en el vértice
+        hashEstiloDimension.put(mxConstants.STYLE_WHITE_SPACE, "wrap");
+        // Estilo hechos igual al de dimensión, peo con diferentes coloresF
+        hashEstiloHecho = new HashMap<>(hashEstiloDimension);
+        // Color de relleno del nodo.
+        hashEstiloDimension.put(mxConstants.STYLE_FILLCOLOR, "#E0ECF8");
+        hashEstiloHecho.put(mxConstants.STYLE_FILLCOLOR, "#F8E0E0");
+        // Color de la línea de contorno
+        hashEstiloDimension.put(mxConstants.STYLE_STROKECOLOR, "#0B3861");
+        hashEstiloHecho.put(mxConstants.STYLE_STROKECOLOR, "#3B0B0B");
+        // Color de la fuente
+        hashEstiloDimension.put(mxConstants.STYLE_FONTCOLOR, "#084B8A");
+        hashEstiloHecho.put(mxConstants.STYLE_FONTCOLOR, "#B40404");
+        //  
+
+        hojaDeEstilos.putCellStyle(ESTILO_DIMENSION, hashEstiloDimension);
+        hojaDeEstilos.putCellStyle(ESTILO_HECHO, hashEstiloHecho);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnAgregarDimension;
+    private javax.swing.JButton btnAgregarHecho;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JComboBox jcbTipo;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JLabel jlNombre;
     private javax.swing.JPanel panelGrafo;
-    private javax.swing.JTextField tfNombre;
+    private javax.swing.JTextField tfIngresadorNombre;
     // End of variables declaration//GEN-END:variables
 
     private String obtenerHTML(String texto) {
@@ -252,5 +364,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 + texto + "\n"
                 + "</body>\n"
                 + "</html>";
+    }
+
+    private void eliminarNodosSeleccionados() {
+        for (Object celda : grafo.getSelectionCells()) {
+            grafo.getModel().remove(celda);
+            hash.remove(((mxCell) celda).getValue());
+        }
     }
 }
