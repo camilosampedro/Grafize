@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package grafo;
+package controlador;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
-import gui.VentanaEsquema;
+import java.io.Serializable;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author camilo
  */
-public class Grafo extends mxGraph {
+public class Grafo extends mxGraph implements Serializable {
 
     /**
      * Hash en el que se guardará ( String nombre nodo -> Object vértice nodo )
@@ -24,35 +24,34 @@ public class Grafo extends mxGraph {
     protected HashMap hash;
 
     /**
-     * Ventana que controlará este grafo.
+     * Identificador del "style" para obtener el diseño de los nodos dimensión.
      */
-    protected VentanaEsquema padre;
+    public static final String ESTILO_DIMENSION = "EstiloDimension";
+    /**
+     * Identificador del "style" para obtener el diseño de los nodos hecho.
+     */
+    public static final String ESTILO_HECHO = "EstiloHecho";
 
+    /**
+     * Variable utilizada para evitar problemas en la serialización de la clase.
+     */
+    public static final long serialVersionUID = 781L;
+
+    /**
+     * Constructor vacío para la clase actual. Sólo inicializa el hash.
+     */
     public Grafo() {
         hash = new HashMap();
     }
 
+    /**
+     * Elimina todos los nodos que se encuentren seleccionados.
+     */
     public void eliminarNodosSeleccionados() {
         for (Object celda : getSelectionCells()) {
             getModel().remove(celda);
             hash.remove(((mxCell) celda).getValue());
         }
-    }
-
-    /**
-     * Agregar nodo al grafo. Este método sólo invoca al método agregarNodo con
-     * x e y generados aleatoriamente.
-     *
-     * @param texto Texto que irá en el nodo del grafo.
-     * @param estilo Estilo según del nodo del grafo.
-     */
-    public void agregarNodo(String texto, String estilo) {
-        agregarNodo(texto, estilo, randX(), randY());
-    }
-
-    public void agregarNodo(String estilo, int x, int y) {
-        String nombre = JOptionPane.showInputDialog(padre, "Por favor ingrese el nombre", "Ingresar nombre", JOptionPane.QUESTION_MESSAGE);
-        agregarNodo(nombre, estilo, x, y);
     }
 
     /**
@@ -65,7 +64,7 @@ public class Grafo extends mxGraph {
      */
     public void agregarNodo(String texto, String estilo, int x, int y) {
         if ("".equals(texto.replaceAll("\\s", ""))) {
-            JOptionPane.showMessageDialog(padre, "Por favor ingrese un nombre para el nuevo nodo", "Nombre vacío", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor ingrese un nombre para el nuevo nodo", "Nombre vacío", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (hash.containsKey(texto)) {
@@ -79,36 +78,24 @@ public class Grafo extends mxGraph {
                 x, y, 100, 60, estilo);
         hash.put(texto, v1);
         getModel().endUpdate();
-        padre.getTFIngresadorNombre().setText("");
     }
 
     /**
-     * Obtiene un valor aleatorio para insertar en X un nodo.
+     * Retorna la variable hash.
      *
-     * @return Número aleatorio entre 0 y ancho - 150
+     * @return hash.
      */
-    public int randX() {
-        return (int) (Math.random() * (padre.getPanelGrafo().getSize().width - 150));
-    }
-
-    public int randY() {
-        return (int) (Math.random() * (padre.getPanelGrafo().getSize().height - 150));
-    }
-
     public HashMap getHash() {
         return hash;
     }
 
+    /**
+     * Reemplaza la variable hash.
+     *
+     * @param hash hash nuevo.
+     */
     public void setHash(HashMap hash) {
         this.hash = hash;
-    }
-
-    public VentanaEsquema getPadre() {
-        return padre;
-    }
-
-    public void setPadre(VentanaEsquema padre) {
-        this.padre = padre;
     }
 
 }

@@ -3,21 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package vista;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
-import grafo.Grafo;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import controlador.Grafo;
+import controlador.MouseEventListener;
 import java.util.HashMap;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -35,14 +29,6 @@ public class VentanaEsquema extends javax.swing.JFrame {
      * y se puede obtener información gráfica del grafo y de los nodos.
      */
     private mxGraphComponent graphComponent;
-    /**
-     * Identificador del "style" para obtener el diseño de los nodos dimensión.
-     */
-    public static final String ESTILO_DIMENSION = "EstiloDimension";
-    /**
-     * Identificador del "style" para obtener el diseño de los nodos hecho.
-     */
-    public static final String ESTILO_HECHO = "EstiloHecho";
 
     /**
      * Última celda (Vértice o lado) a la que se le hizo clic. Usado para
@@ -57,70 +43,21 @@ public class VentanaEsquema extends javax.swing.JFrame {
      */
     public VentanaEsquema() {
         grafo = new Grafo();
-        this.grafo.setPadre(this);
         initComponents();
         inicializarEstilo();
-//        grafo.getModel().addListener(mxEvent.CHANGE, (Object sender, mxEventObject evt) -> {
-//            //            mxIGraphModel.mxAtomicGraphModelChange[] eventos = (mxIGraphModel.mxAtomicGraphModelChange[]) sender;
-//            System.out.println("0000000" + sender);
-//            evt.getProperties().keySet().stream().forEach((propiedad) -> {
-//                if (evt.getProperties().get(propiedad) instanceof mxGraphModel.mxValueChange) {
-//                    mxGraphModel.mxValueChange evento = (mxGraphModel.mxValueChange) evt.getProperties().get(propiedad);
-//                    System.out.println(evento.toString());
-//                    System.out.println(propiedad + ": " + evt.getProperties().get(propiedad));
-//                } else {
-//                    System.out.println("NO: " + evt.getProperties().get(propiedad));
-//                }
-//            });
-//        });
-
-        // Evento para controlar qué celda tiene el último clic que se hizo. 
-        // (Qué celda está seleccionada).
-        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseReleased(MouseEvent e) {
-//                cell = (mxCell) graphComponent.getCellAt(e.getX(), e.getY());
-//            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        grafo.agregarNodo(ESTILO_HECHO, e.getX(), e.getY());
-                    } else {
-                        grafo.agregarNodo(ESTILO_DIMENSION, e.getX(), e.getY());
-                    }
-
-                }
-            }
-        });
+        graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
     }
 
+    /**
+     * Ventana con un grafo resultado.
+     *
+     * @param grafo Grafo a imprimir.
+     */
     public VentanaEsquema(Grafo grafo) {
         this.grafo = grafo;
-        this.grafo.setPadre(this);
         initComponents();
         inicializarEstilo();
-
-        // Evento para controlar qué celda tiene el último clic que se hizo. 
-        // (Qué celda está seleccionada).
-        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                cell = (mxCell) graphComponent.getCellAt(e.getX(), e.getY());
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        grafo.agregarNodo(ESTILO_HECHO, e.getX(), e.getY());
-                    } else {
-                        grafo.agregarNodo(ESTILO_DIMENSION, e.getX(), e.getY());
-                    }
-                }
-            }
-        });
+        graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
     }
 
     /**
@@ -246,7 +183,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
     private void btnAgregarDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarDimensionActionPerformed
         // TODO add your handling code here:
-        grafo.agregarNodo(tfIngresadorNombre.getText(), ESTILO_DIMENSION);
+        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.ESTILO_DIMENSION, randX(), randY());
+        tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarDimensionActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -256,7 +194,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
     private void btnAgregarHechoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHechoActionPerformed
         // TODO add your handling code here:
-        grafo.agregarNodo(tfIngresadorNombre.getText(), ESTILO_HECHO);
+        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.ESTILO_HECHO, randX(), randY());
+        tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarHechoActionPerformed
 
     private void btnMenuMakeOntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMakeOntoActionPerformed
@@ -281,15 +220,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaEsquema.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaEsquema.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaEsquema.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(VentanaEsquema.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+
         //</editor-fold>
         //</editor-fold>
 
@@ -310,7 +246,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         // Hash para los estilos, de la forma ("Propiedad"->Valor)
         // Las propiedades se encuentran en mxConstants.STYLE_*
         HashMap<String, Object> hashEstiloDimension = new HashMap<>();
-        HashMap<String, Object> hashEstiloHecho = null;
+        HashMap<String, Object> hashEstiloHecho;
         // Forma del nodo
         hashEstiloDimension.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
         // El nuevo nodo no será editable 
@@ -334,9 +270,28 @@ public class VentanaEsquema extends javax.swing.JFrame {
         hashEstiloHecho.put(mxConstants.STYLE_FONTCOLOR, "#B40404");
         //  
 
-        hojaDeEstilos.putCellStyle(ESTILO_DIMENSION, hashEstiloDimension);
-        hojaDeEstilos.putCellStyle(ESTILO_HECHO, hashEstiloHecho);
+        hojaDeEstilos.putCellStyle(Grafo.ESTILO_DIMENSION, hashEstiloDimension);
+        hojaDeEstilos.putCellStyle(Grafo.ESTILO_HECHO, hashEstiloHecho);
     }
+
+    /**
+     * Obtiene un valor aleatorio para insertar en X un nodo.
+     *
+     * @return Número aleatorio entre 0 y ancho - 150
+     */
+    public int randX() {
+        return (int) (Math.random() * (panelGrafo.getSize().width - 150));
+    }
+
+    /**
+     * Obtiene un valor aleatorio para insertar en Y un nodo.
+     *
+     * @return Número aleatorio entre 0 y alto - 150
+     */
+    public int randY() {
+        return (int) (Math.random() * (panelGrafo.getSize().height - 150));
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarDimension;
@@ -354,24 +309,4 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private javax.swing.JTextField tfIngresadorNombre;
     // End of variables declaration//GEN-END:variables
 
-    private String obtenerHTML(String texto) {
-        return "<!DOCTYPE html>\n"
-                + "<html lang=\"en\">\n"
-                + "  <head>\n"
-                + "    <meta charset=\"utf-8\">\n"
-                + "    <title>title</title>\n"
-                + "  </head>\n"
-                + "  <body>\n"
-                + texto + "\n"
-                + "</body>\n"
-                + "</html>";
-    }
-
-    public JTextField getTFIngresadorNombre() {
-        return tfIngresadorNombre;
-    }
-
-    public JPanel getPanelGrafo() {
-        return panelGrafo;
-    }
 }

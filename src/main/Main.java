@@ -5,7 +5,7 @@
  */
 package main;
 
-import gui.VentanaEsquema;
+import vista.VentanaEsquema;
 
 /**
  *
