@@ -7,21 +7,18 @@ package gui;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGraphModel;
-import com.mxgraph.model.mxGraphModel.mxValueChange;
-import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
-import com.mxgraph.view.mxGraphSelectionModel;
 import com.mxgraph.view.mxStylesheet;
-import com.sun.media.jfxmedia.logging.Logger;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import sun.font.GraphicComponent;
 
 /**
  *
@@ -32,12 +29,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
     /**
      * Objeto con la información del grafo.
      */
-    protected static mxGraph grafo;
+    protected mxGraph grafo;
     /**
      * Hash en el que se guardará ( String nombre nodo -> Object vértice nodo )
      * según se vayan insertando estos al grafo.
      */
-    protected static HashMap hash;
+    protected HashMap hash;
     /**
      * Componente gráfico del grafo. Aquí se hacen las actualizaciones gráficas
      * y se puede obtener información gráfica del grafo y de los nodos.
@@ -61,39 +58,53 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private mxCell cell;
 
     /**
-     * Crea una nueva ventana de grafo.
+     * Crea una nueva ventana de grafo vacío.
      */
     public VentanaEsquema() {
+        grafo = new mxGraph();
+        hash = new HashMap();
         initComponents();
         inicializarEstilo();
+//        grafo.getModel().addListener(mxEvent.CHANGE, (Object sender, mxEventObject evt) -> {
+//            //            mxIGraphModel.mxAtomicGraphModelChange[] eventos = (mxIGraphModel.mxAtomicGraphModelChange[]) sender;
+//            System.out.println("0000000" + sender);
+//            evt.getProperties().keySet().stream().forEach((propiedad) -> {
+//                if (evt.getProperties().get(propiedad) instanceof mxGraphModel.mxValueChange) {
+//                    mxGraphModel.mxValueChange evento = (mxGraphModel.mxValueChange) evt.getProperties().get(propiedad);
+//                    System.out.println(evento.toString());
+//                    System.out.println(propiedad + ": " + evt.getProperties().get(propiedad));
+//                } else {
+//                    System.out.println("NO: " + evt.getProperties().get(propiedad));
+//                }
+//            });
+//        });
 
-        grafo.getModel().addListener(mxEvent.CHANGE, (Object sender, mxEventObject evt) -> {
-            //            mxIGraphModel.mxAtomicGraphModelChange[] eventos = (mxIGraphModel.mxAtomicGraphModelChange[]) sender;
-            System.out.println("0000000" + sender);
-            for (String propiedad : evt.getProperties().keySet()) {
-                if (evt.getProperties().get(propiedad) instanceof mxGraphModel.mxValueChange) {
-                    mxGraphModel.mxValueChange evento = (mxGraphModel.mxValueChange) evt.getProperties().get(propiedad);
-                    System.out.println(evento.toString());
-                    System.out.println(propiedad + ": " + evt.getProperties().get(propiedad));
-                } else {
-                    System.out.println("NO: " + evt.getProperties().get(propiedad));
+        // Evento para controlar qué celda tiene el último clic que se hizo. 
+        // (Qué celda está seleccionada).
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseReleased(MouseEvent e) {
+//                cell = (mxCell) graphComponent.getCellAt(e.getX(), e.getY());
+//            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        agregarNodo("Nodo", ESTILO_HECHO, e.getX(), e.getY());
+                    } else {
+                        agregarNodo("Nodo", ESTILO_DIMENSION, e.getX(), e.getY());
+                    }
                 }
             }
-
-//            mxGraphSelectionModel selection = (mxGraphSelectionModel) sender;
-//            if (!selection.isEmpty()) {
-//                mxCell celda = (mxCell) selection.getCell();
-//                if (celda.isEdge()) {
-//                    System.out.println("Celda: " + celda.getValue());
-//                }
-//            } else {
-//                System.out.println("Celda vacía");
-//                mxCell celda = (mxCell) selection.getCell();
-//                if (celda.isEdge()) {
-//                    System.out.println("Celda: " + celda.getValue());
-//                }
-//            }
         });
+    }
+
+    public VentanaEsquema(mxGraph grafo) {
+        this.grafo = grafo;
+        hash = new HashMap();
+        initComponents();
+        inicializarEstilo();
 
         // Evento para controlar qué celda tiene el último clic que se hizo. 
         // (Qué celda está seleccionada).
@@ -102,8 +113,18 @@ public class VentanaEsquema extends javax.swing.JFrame {
             public void mouseReleased(MouseEvent e) {
                 cell = (mxCell) graphComponent.getCellAt(e.getX(), e.getY());
             }
-        });
 
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        agregarNodo("Nodo", ESTILO_HECHO, e.getX(), e.getY());
+                    } else {
+                        agregarNodo("Nodo", ESTILO_DIMENSION, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -122,17 +143,18 @@ public class VentanaEsquema extends javax.swing.JFrame {
         tfIngresadorNombre = new javax.swing.JTextField();
         btnAgregarHecho = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuGrafo = new javax.swing.JMenu();
+        btnMenuMakeOnto = new javax.swing.JMenuItem();
+        btnMenuMakeCovering = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuEdicion = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Grafize - Ingresar esquema");
 
         panelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelGrafo.setLayout(new java.awt.GridLayout(1, 0));
-        grafo = new mxGraph();
-        hash = new HashMap();
         graphComponent = new mxGraphComponent(grafo);
         //graphComponent.setPreferredSize(new Dimension(500,500));
         //panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -162,15 +184,27 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
-        jMenu1.setText("Grafo");
+        menuGrafo.setText("Grafo");
 
-        jMenuItem1.setText("Make onto");
-        jMenu1.add(jMenuItem1);
+        btnMenuMakeOnto.setText("Make onto");
+        btnMenuMakeOnto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuMakeOntoActionPerformed(evt);
+            }
+        });
+        menuGrafo.add(btnMenuMakeOnto);
 
-        jMenuBar1.add(jMenu1);
+        btnMenuMakeCovering.setText("Make covering");
+        menuGrafo.add(btnMenuMakeCovering);
+        menuGrafo.add(jSeparator1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jMenuItem1.setText("Cerrar");
+        menuGrafo.add(jMenuItem1);
+
+        jMenuBar1.add(menuGrafo);
+
+        menuEdicion.setText("Edición");
+        jMenuBar1.add(menuEdicion);
 
         setJMenuBar(jMenuBar1);
 
@@ -229,6 +263,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
         agregarNodo(tfIngresadorNombre.getText(), ESTILO_HECHO);
     }//GEN-LAST:event_btnAgregarHechoActionPerformed
 
+    private void btnMenuMakeOntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMakeOntoActionPerformed
+        // TODO add your handling code here:
+        VentanaEsquema ventana = new VentanaEsquema(grafo);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnMenuMakeOntoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -258,11 +298,20 @@ public class VentanaEsquema extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VentanaEsquema().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new VentanaEsquema().setVisible(true);
         });
+    }
+
+    /**
+     * Agregar nodo al grafo. Este método sólo invoca al método agregarNodo con
+     * x e y generados aleatoriamente.
+     *
+     * @param texto Texto que irá en el nodo del grafo.
+     * @param estilo Estilo según del nodo del grafo.
+     */
+    public void agregarNodo(String texto, String estilo) {
+        agregarNodo(texto, estilo, randX(), randY());
     }
 
     /**
@@ -270,20 +319,23 @@ public class VentanaEsquema extends javax.swing.JFrame {
      *
      * @param texto Texto que irá en el nodo del grafo.
      * @param estilo Estilo según del nodo del grafo.
+     * @param x Posición en el eje x del nodo.
+     * @param y Posición en el eje y del nodo.
      */
-    public void agregarNodo(String texto, String estilo) {
+    public void agregarNodo(String texto, String estilo, int x, int y) {
         if ("".equals(texto.replaceAll("\\s", ""))) {
             JOptionPane.showMessageDialog(this, "Por favor ingrese un nombre para el nuevo nodo", "Nombre vacío", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (hash.containsKey(texto)) {
-            JOptionPane.showMessageDialog(this, "El nodo \"" + texto + "\" ya existe, por favor ingrese un nombre diferente", "Nombre ya existe", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "El nodo \"" + texto + "\" ya existe, por favor ingrese un nombre diferente", "Nombre ya existe", JOptionPane.ERROR_MESSAGE);
+            agregarNodo(texto + "_copia", estilo, x, y);
             return;
         }
         grafo.getModel().beginUpdate();
         Object parent = grafo.getDefaultParent();
         Object v1 = grafo.insertVertex(parent, null, texto,
-                randX(), randY(), 100, 60, estilo);
+                x, y, 100, 60, estilo);
         hash.put(texto, v1);
         grafo.getModel().endUpdate();
         tfIngresadorNombre.setText("");
@@ -307,7 +359,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
      * colores, editabilidad, espaciado, ...). El estilo se guardará como
      * ESTILO_NODO
      */
-    public static void inicializarEstilo() {
+    private void inicializarEstilo() {
         // Crear un nuevo objeto de estilos
         mxStylesheet hojaDeEstilos = grafo.getStylesheet();
         // Hash para los estilos, de la forma ("Propiedad"->Valor)
@@ -321,6 +373,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
 //        hashEstiloDimension.put(mxConstants.STYLE_EDITABLE, 0);
         // Tamaño de la fuente
         hashEstiloDimension.put(mxConstants.STYLE_FONTSIZE, 14);
+        hashEstiloDimension.put(mxConstants.STYLE_GLASS, 1);
         // Quebrar la línea al no caber en el vértice
         hashEstiloDimension.put(mxConstants.STYLE_WHITE_SPACE, "wrap");
         // Estilo hechos igual al de dimensión, peo con diferentes coloresF
@@ -344,11 +397,14 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarDimension;
     private javax.swing.JButton btnAgregarHecho;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem btnMenuMakeCovering;
+    private javax.swing.JMenuItem btnMenuMakeOnto;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel jlNombre;
+    private javax.swing.JMenu menuEdicion;
+    private javax.swing.JMenu menuGrafo;
     private javax.swing.JPanel panelGrafo;
     private javax.swing.JTextField tfIngresadorNombre;
     // End of variables declaration//GEN-END:variables

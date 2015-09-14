@@ -4,21 +4,36 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="menuGrafo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Grafo"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="btnMenuMakeOnto">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Make onto"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMenuMakeOntoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="btnMenuMakeCovering">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Make covering"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cerrar"/>
               </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="menuEdicion">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="text" type="java.lang.String" value="Edici&#xf3;n"/>
           </Properties>
         </Menu>
       </SubComponents>
@@ -100,7 +115,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="grafo = new mxGraph();&#xa;hash = new HashMap();&#xa;graphComponent = new mxGraphComponent(grafo);&#xa;//graphComponent.setPreferredSize(new Dimension(500,500));&#xa;//panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));&#xa;//System.out.println(&quot;Size:&quot; + panelGrafo.getSize());&#xa;panelGrafo.add(graphComponent);"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="graphComponent = new mxGraphComponent(grafo);&#xa;//graphComponent.setPreferredSize(new Dimension(500,500));&#xa;//panelGrafo.setLayout(new FlowLayout(FlowLayout.LEFT));&#xa;//System.out.println(&quot;Size:&quot; + panelGrafo.getSize());&#xa;panelGrafo.add(graphComponent);"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
