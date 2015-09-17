@@ -9,7 +9,7 @@ import vista.VentanaEsquema;
 
 /**
  *
- * @author camilo.sampedro
+ * @author Camilo Sampedro
  */
 public class Main {
 

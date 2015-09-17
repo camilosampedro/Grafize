@@ -5,7 +5,10 @@
  */
 package modelo;
 
+import exception.NoEncontrado;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -77,4 +80,36 @@ public class Arbol<T> {
         return false;
     }
 
+    public void agregarNodo(T padre, T dato) {
+        try {
+            Nodo<T> nodoNuevo = new Nodo(dato);
+            Nodo<T> nodoPadre = obtenerNodo(padre);
+            nodoPadre.agregarHijo(nodoNuevo);
+        } catch (NoEncontrado ex) {
+            Logger.getLogger(Arbol.class.getName()).log(Level.WARNING, null, ex);
+        }
+    }
+
+    public Nodo<T> obtenerNodo(T dato) throws NoEncontrado {
+        if (!existe(dato)) {
+            throw new NoEncontrado(dato);
+        }
+        return buscar(raiz, new Nodo<>(dato));
+    }
+
+    protected Nodo<T> buscar(Nodo actual, Nodo<T> dato) {
+        for (Iterator it = actual.hijos.iterator(); it.hasNext();) {
+            Nodo<T> hijo = (Nodo<T>) it.next();
+            if (hijo == dato) {
+                return hijo;
+            }
+            if (!hijo.esHoja()) {
+                Nodo busqueda = buscar(hijo, dato);
+                if (busqueda != null) {
+                    return busqueda;
+                }
+            }
+        }
+        return null;
+    }
 }

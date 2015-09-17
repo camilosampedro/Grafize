@@ -95,6 +95,7 @@ public class Nodo<T> {
 
     /**
      * Información que almacenará el nodo.
+     *
      * @return the informacion
      */
     public T getInformacion() {
@@ -103,6 +104,7 @@ public class Nodo<T> {
 
     /**
      * Información que almacenará el nodo.
+     *
      * @param informacion the informacion to set
      */
     public void setInformacion(T informacion) {
@@ -111,6 +113,7 @@ public class Nodo<T> {
 
     /**
      * Padre del nodo dentro del árbol.
+     *
      * @return the padre
      */
     public Nodo<T> getPadre() {
@@ -119,11 +122,19 @@ public class Nodo<T> {
 
     /**
      * Padre del nodo dentro del árbol.
+     *
      * @param padre the padre to set
      */
     public void setPadre(Nodo<T> padre) {
         this.padre = padre;
     }
 
-    
+    /**
+     * Agrega un nuevo nodo a la lista de hijos.
+     *
+     * @param hijo Hijo nuevo a agregar
+     */
+    public void agregarHijo(Nodo<T> hijo) {
+        this.hijos.add(hijo);
+    }
 }

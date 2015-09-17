@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author camilo
+ * @author Camilo Sampedro
  */
 public class Grafo extends mxGraph implements Serializable {
 
