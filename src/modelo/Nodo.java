@@ -30,7 +30,7 @@ public class Nodo<T> {
     /**
      * Hijos del nodo. Otros nodos que estarán un nivel más arriba del nodo.
      */
-    protected List<Nodo<T>> hijos;
+    protected List<Inclusion<T>> hijos;
 
     /**
      * Constructor para nodos vacíos. Inicializa la lista de hijos vacía y padre
@@ -71,7 +71,7 @@ public class Nodo<T> {
      * @return true si el nodo no tiene hijos, false si tiene al menos un hijo.
      */
     public Boolean esHoja() {
-        return hijos == null | hijos.isEmpty();
+        return hijos == null || hijos.isEmpty();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class Nodo<T> {
      *
      * @param hijo Hijo nuevo a agregar
      */
-    public void agregarHijo(Nodo<T> hijo) {
-        this.hijos.add(hijo);
+    public void agregarHijo(Nodo<T> hijo, double inclusion) {
+        this.hijos.add(new Inclusion<>(hijo, inclusion));
     }
 }

@@ -37,9 +37,9 @@ public class MouseEventListener extends MouseAdapter {
             // Solicita el nombre que irá en el nodo.
             String nombre = JOptionPane.showInputDialog(null, "Por favor ingrese el nombre", "Ingresar nombre", JOptionPane.QUESTION_MESSAGE);
             if (SwingUtilities.isRightMouseButton(e)) {
-                grafo.agregarNodo(nombre, Grafo.ESTILO_HECHO, e.getX(), e.getY());
+                grafo.agregarNodo(nombre, Grafo.HECHO, e.getX(), e.getY());
             } else {
-                grafo.agregarNodo(nombre, Grafo.ESTILO_DIMENSION, e.getX(), e.getY());
+                grafo.agregarNodo(nombre, Grafo.DIMENSION, e.getX(), e.getY());
             }
 
         }

@@ -21,5 +21,5 @@ public class Main {
         VentanaEsquema ventana = new VentanaEsquema();
         ventana.setVisible(true);
     }
-    
+
 }

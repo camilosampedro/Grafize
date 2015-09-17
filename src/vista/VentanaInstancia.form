@@ -63,32 +63,32 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panelGrafo" alignment="0" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnConectar" alignment="1" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnAgregarCategoria" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnAgregarDimension" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnAgregarHecho" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnEliminar" min="-2" pref="93" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="jlNombre" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="tfIngresadorNombre" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
+          <Component id="panelGrafo" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="panelGrafo" pref="391" max="32767" attributes="0"/>
+              <Component id="panelGrafo" pref="341" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="tfIngresadorNombre" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -96,12 +96,10 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnAgregarCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAgregarDimension" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAgregarHecho" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnConectar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -125,12 +123,12 @@
         <Property name="rows" type="int" value="1"/>
       </Layout>
     </Container>
-    <Component class="javax.swing.JButton" name="btnAgregarCategoria">
+    <Component class="javax.swing.JButton" name="btnAgregarDimension">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Agregar tipo cagegor&#xed;a"/>
+        <Property name="text" type="java.lang.String" value="Agregar dimensi&#xf3;n"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarCategoriaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarDimensionActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnEliminar">
@@ -150,18 +148,10 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnAgregarHecho">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Agregar nuevo tipo dimensi&#xf3;n"/>
+        <Property name="text" type="java.lang.String" value="Agregar hecho"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarHechoActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="btnConectar">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Conectar"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConectarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

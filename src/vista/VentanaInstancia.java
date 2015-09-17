@@ -11,18 +11,13 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxStylesheet;
 import controlador.Grafo;
 import controlador.MouseEventListener;
-import exception.NoEncontrado;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import modelo.Arbol;
 
 /**
  *
  * @author Camilo Sampedro
  */
-public class VentanaEsquema extends javax.swing.JFrame {
+public class VentanaInstancia extends javax.swing.JFrame {
 
     /**
      * Objeto con la información del grafo.
@@ -41,14 +36,15 @@ public class VentanaEsquema extends javax.swing.JFrame {
      * hizo clic. Si no hay ninguna celda seleccionada, este valor será nulo y
      * ninguna será eliminada.
      */
-    private mxCell celda;
+    private mxCell cell;
 
     /**
      * Crea una nueva ventana de grafo vacío.
      */
-    public VentanaEsquema() {
+    public VentanaInstancia() {
         grafo = new Grafo();
         initComponents();
+        inicializarEstilo();
         graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
     }
 
@@ -57,9 +53,10 @@ public class VentanaEsquema extends javax.swing.JFrame {
      *
      * @param grafo Grafo a imprimir.
      */
-    public VentanaEsquema(Grafo grafo) {
+    public VentanaInstancia(Grafo grafo) {
         this.grafo = grafo;
         initComponents();
+        inicializarEstilo();
         graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
     }
 
@@ -73,12 +70,11 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private void initComponents() {
 
         panelGrafo = new javax.swing.JPanel();
-        btnAgregarCategoria = new javax.swing.JButton();
+        btnAgregarDimension = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jlNombre = new javax.swing.JLabel();
         tfIngresadorNombre = new javax.swing.JTextField();
         btnAgregarHecho = new javax.swing.JButton();
-        btnConectar = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuGrafo = new javax.swing.JMenu();
         btnMenuMakeOnto = new javax.swing.JMenuItem();
@@ -98,10 +94,10 @@ public class VentanaEsquema extends javax.swing.JFrame {
         //System.out.println("Size:" + panelGrafo.getSize());
         panelGrafo.add(graphComponent);
 
-        btnAgregarCategoria.setText("Agregar tipo cagegoría");
-        btnAgregarCategoria.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarDimension.setText("Agregar dimensión");
+        btnAgregarDimension.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarCategoriaActionPerformed(evt);
+                btnAgregarDimensionActionPerformed(evt);
             }
         });
 
@@ -114,17 +110,10 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
         jlNombre.setText("Nombre:");
 
-        btnAgregarHecho.setText("Agregar nuevo tipo dimensión");
+        btnAgregarHecho.setText("Agregar hecho");
         btnAgregarHecho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarHechoActionPerformed(evt);
-            }
-        });
-
-        btnConectar.setText("Conectar");
-        btnConectar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConectarActionPerformed(evt);
             }
         });
 
@@ -156,109 +145,64 @@ public class VentanaEsquema extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConectar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnAgregarDimension, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAgregarHecho)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
                         .addComponent(jlNombre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(2, 2, 2)
                         .addComponent(tfIngresadorNombre)))
                 .addContainerGap())
+            .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfIngresadorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlNombre))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregarCategoria)
+                    .addComponent(btnAgregarDimension)
                     .addComponent(btnEliminar)
                     .addComponent(btnAgregarHecho))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnConectar)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCategoriaActionPerformed
+    private void btnAgregarDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarDimensionActionPerformed
         // TODO add your handling code here:
         grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.DIMENSION, randX(), randY());
         tfIngresadorNombre.setText("");
-    }//GEN-LAST:event_btnAgregarCategoriaActionPerformed
+    }//GEN-LAST:event_btnAgregarDimensionActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
         grafo.eliminarNodosSeleccionados();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnMenuMakeOntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMakeOntoActionPerformed
-        // TODO add your handling code here:
-        VentanaEsquema ventana = new VentanaEsquema(grafo);
-        ventana.setVisible(true);
-    }//GEN-LAST:event_btnMenuMakeOntoActionPerformed
-
     private void btnAgregarHechoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHechoActionPerformed
         // TODO add your handling code here:
-//        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.HECHO, randX(), randY());
-//        tfIngresadorNombre.setText("");
-        Arbol arbol = grafo.construirArbol();
-        if (arbol == null) {
-            int input = JOptionPane.showConfirmDialog(this, "Se necesita que haya una sola raíz. ¿Crear nuevo nodo raíz?", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (input == JOptionPane.OK_OPTION) {
-                String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
-                try {
-                    grafo.crearRaiz(nombre, randX(), randY());
-                } catch (NoEncontrado ex) {
-                    Logger.getLogger(VentanaEsquema.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            return;
-        }
-        VentanaEsquema ventanaNueva = new VentanaEsquema();
-        ventanaNueva.setVisible(true);
-        this.dispose();
+        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.HECHO, randX(), randY());
+        tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarHechoActionPerformed
 
-    private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarActionPerformed
+    private void btnMenuMakeOntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMakeOntoActionPerformed
         // TODO add your handling code here:
-        if (btnConectar.isSelected()) {
-            celda = (mxCell) grafo.getSelectionCell();
-            if (celda == null) {
-                btnConectar.setSelected(false);
-            }
-        } else {
-            if (celda.equals((mxCell) grafo.getSelectionCell())) {
-                return;
-            }
-            String insercion = JOptionPane.showInputDialog(this, "Por favor, ingrese el grado de inclusión");
-            try {
-                double gradoInclusion = Double.parseDouble(insercion);
-                if (gradoInclusion < 0 || gradoInclusion > 1) {
-                    JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                grafo.enlazarNodos((String) celda.getValue(), (String) ((mxCell) grafo.getSelectionCell()).getValue(), gradoInclusion);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingrese un número en el formato #.##", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (NoEncontrado ex) {
-                Logger.getLogger(VentanaEsquema.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnConectarActionPerformed
+        VentanaInstancia ventana = new VentanaInstancia(grafo);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnMenuMakeOntoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,12 +221,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaEsquema.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaInstancia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -293,8 +233,47 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new VentanaEsquema().setVisible(true);
+            new VentanaInstancia().setVisible(true);
         });
+    }
+
+    /**
+     * Inicializa los estilos para los nuevos nodos ingresados al grafo. (Forma,
+     * colores, editabilidad, espaciado, ...). El estilo se guardará como
+     * ESTILO_NODO
+     */
+    private void inicializarEstilo() {
+        // Crear un nuevo objeto de estilos
+        mxStylesheet hojaDeEstilos = grafo.getStylesheet();
+        // Hash para los estilos, de la forma ("Propiedad"->Valor)
+        // Las propiedades se encuentran en mxConstants.STYLE_*
+        HashMap<String, Object> hashEstiloDimension = new HashMap<>();
+        HashMap<String, Object> hashEstiloHecho;
+        // Forma del nodo
+        hashEstiloDimension.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_ELLIPSE);
+        // El nuevo nodo no será editable 
+        // (No se podrá modificar el texto por la interfaz)
+//        hashEstiloDimension.put(mxConstants.STYLE_EDITABLE, 0);
+        // Tamaño de la fuente
+        hashEstiloDimension.put(mxConstants.STYLE_FONTSIZE, 14);
+        hashEstiloDimension.put(mxConstants.STYLE_GLASS, 1);
+        // Quebrar la línea al no caber en el vértice
+        hashEstiloDimension.put(mxConstants.STYLE_WHITE_SPACE, "wrap");
+        // Estilo hechos igual al de dimensión, peo con diferentes coloresF
+        hashEstiloHecho = new HashMap<>(hashEstiloDimension);
+        // Color de relleno del nodo.
+        hashEstiloDimension.put(mxConstants.STYLE_FILLCOLOR, "#E0ECF8");
+        hashEstiloHecho.put(mxConstants.STYLE_FILLCOLOR, "#F8E0E0");
+        // Color de la línea de contorno
+        hashEstiloDimension.put(mxConstants.STYLE_STROKECOLOR, "#0B3861");
+        hashEstiloHecho.put(mxConstants.STYLE_STROKECOLOR, "#3B0B0B");
+        // Color de la fuente
+        hashEstiloDimension.put(mxConstants.STYLE_FONTCOLOR, "#084B8A");
+        hashEstiloHecho.put(mxConstants.STYLE_FONTCOLOR, "#B40404");
+        //  
+
+        hojaDeEstilos.putCellStyle(Grafo.DIMENSION, hashEstiloDimension);
+        hojaDeEstilos.putCellStyle(Grafo.HECHO, hashEstiloHecho);
     }
 
     /**
@@ -317,9 +296,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarCategoria;
+    private javax.swing.JButton btnAgregarDimension;
     private javax.swing.JButton btnAgregarHecho;
-    private javax.swing.JToggleButton btnConectar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JMenuItem btnMenuMakeCovering;
     private javax.swing.JMenuItem btnMenuMakeOnto;

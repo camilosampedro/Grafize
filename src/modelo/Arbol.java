@@ -2,13 +2,12 @@ package modelo;
 
 import exception.NoEncontrado;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
 /**
  *
- * @author camilo
- * @param <T> Tipo de datos que se almacenarán en cada nodo del árbol
+ * @author Camilo Sampedro
+ * @param <T> Tipo de datos que se almacenarán en cada nodo del árbol.
  */
 public class Arbol<T> {
 
@@ -20,10 +19,10 @@ public class Arbol<T> {
     /**
      * Inicializa un árbol con un único nodo.
      *
-     * @param rootData Información que irá en el nodo raíz.
+     * @param datoRaiz Información que irá en el nodo raíz.
      */
-    public Arbol(T rootData) {
-        raiz = new Nodo<>(rootData);
+    public Arbol(T datoRaiz) {
+        raiz = new Nodo<>(datoRaiz);
     }
 
     /**
@@ -51,7 +50,7 @@ public class Arbol<T> {
      * @return true si existe al menos un nodo con el dato en el árbol, false en
      * caso contrario.
      */
-    public Boolean existe(T dato) {
+    public Boolean existe(Object dato) {
         return existeRecursivo(raiz, new Nodo(dato));
     }
 
@@ -78,36 +77,72 @@ public class Arbol<T> {
         return false;
     }
 
-    public void agregarNodo(T padre, T dato) {
-        try {
-            Nodo<T> nodoNuevo = new Nodo(dato);
-            Nodo<T> nodoPadre = obtenerNodo(padre);
-            nodoPadre.agregarHijo(nodoNuevo);
-        } catch (NoEncontrado ex) {
-            Logger.getLogger(Arbol.class.getName()).log(Level.WARNING, null, ex);
+    /**
+     * Agrega un nuevo nodo al árbol.
+     *
+     * @param padre Dato padre del nodo a agregar.
+     * @param dato Dato a insertar en el nuevo nodo.
+     * @param inclusion Grado de inclusión del padre hacia el hijo.
+     * @throws NoEncontrado El nodo padre no ha sido encontrado.
+     */
+    public void agregarNodo(T padre, T dato, double inclusion) throws NoEncontrado {
+        Nodo<T> nodoPadre;
+        if (padre == null) {
+            nodoPadre = raiz;
+        } else {
+            nodoPadre = obtenerNodo(padre);
         }
+        Nodo<T> nodoNuevo = new Nodo(dato);
+        nodoPadre.agregarHijo(nodoNuevo, inclusion);
     }
 
-    public Nodo<T> obtenerNodo(T dato) throws NoEncontrado {
+    /**
+     * Obtiene el nodo con el dato igual a dato.
+     *
+     * @param dato Dato a buscar.
+     * @return Nodo encontrado.
+     * @throws NoEncontrado El nodo no ha sido encontraod.
+     */
+    public Nodo<T> obtenerNodo(Object dato) throws NoEncontrado {
         if (!existe(dato)) {
             throw new NoEncontrado(dato);
         }
-        return buscar(raiz, new Nodo<>(dato));
+        return obtenerNodoRecursivo(raiz, dato);
     }
 
-    protected Nodo<T> buscar(Nodo actual, Nodo<T> dato) {
+    /**
+     * Busca recursivamente el nodo dato en el árbol.
+     *
+     * @param actual Nodo que actualmente se está recorriendo.
+     * @param dato Nodo con el dato que se está buscando.
+     * @return Nodo encontrado o null en caso contrario.
+     */
+    protected Nodo<T> obtenerNodoRecursivo(Nodo actual, Object dato) {
         for (Iterator it = actual.hijos.iterator(); it.hasNext();) {
             Nodo<T> hijo = (Nodo<T>) it.next();
-            if (hijo == dato) {
+            if (hijo.equals(dato)) {
                 return hijo;
             }
             if (!hijo.esHoja()) {
-                Nodo busqueda = buscar(hijo, dato);
+                Nodo busqueda = obtenerNodoRecursivo(hijo, dato);
                 if (busqueda != null) {
                     return busqueda;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * Obtiene todas las hojas
+     *
+     * @return No implementado!
+     */
+    public List<Nodo<T>> getHojas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void eliminar(Object value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
