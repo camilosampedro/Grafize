@@ -15,6 +15,12 @@ public class TipoCategoria {
 
     private String nombreCategoria;
 
+    /**
+     * Constructor de un tipo de categoría sólo con el nombre. Sólo se permite
+     * este constructor, no habrán categorías vacías.
+     *
+     * @param nombreCategoria
+     */
     public TipoCategoria(String nombreCategoria) {
         this.nombreCategoria = nombreCategoria;
     }
@@ -53,10 +59,7 @@ public class TipoCategoria {
             return false;
         }
         final TipoCategoria other = (TipoCategoria) obj;
-        if (!Objects.equals(this.nombreCategoria, other.nombreCategoria)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.nombreCategoria, other.nombreCategoria);
     }
 
 }

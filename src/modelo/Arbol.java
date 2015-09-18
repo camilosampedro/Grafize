@@ -142,7 +142,12 @@ public class Arbol<T> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void eliminar(Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     *
+     * @param dato
+     * @throws exception.NoEncontrado
+     */
+    public void eliminar(T dato) throws NoEncontrado {
+        throw new UnsupportedOperationException();
     }
 }

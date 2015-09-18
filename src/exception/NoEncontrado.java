@@ -13,6 +13,12 @@ public class NoEncontrado extends Exception {
 
     Object dato;
 
+    /**
+     * Arroja una nueva excepción con el dato no encontrado. Excepción de la
+     * clase Arbol y Nodo
+     *
+     * @param dato Dato no encontrado.
+     */
     public NoEncontrado(Object dato) {
         super("No encontrado" + dato);
         this.dato = dato;

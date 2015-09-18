@@ -35,7 +35,15 @@ public class Grafo extends mxGraph implements Serializable {
      * Identificador del "style" para obtener el diseño de los nodos hecho.
      */
     public static final String HECHO = "HECHO";
+    /**
+     * Identificador del "style" para obtener el diseño de las flechas no
+     * punteadas.
+     */
     public static final String FLECHA_TOTAL = "FLECHAPARCIAL";
+    /**
+     * Identificador del "style" para obtener el diseño de las flechas
+     * discontinuas.
+     */
     public static final String FLECHA_PARCIAL = "FLECHATOTAL";
 
     /**
@@ -43,7 +51,8 @@ public class Grafo extends mxGraph implements Serializable {
      */
     public static final long serialVersionUID = 781L;
 
-    private final List<Nodo<mxCell>> nodosSueltos;
+    private final ArrayList<Nodo<mxCell>> nodosSueltos;
+    private final ArrayList<mxCell> lados;
 
     /**
      * Constructor vacío para la clase actual. Sólo inicializa el hash.
@@ -55,6 +64,7 @@ public class Grafo extends mxGraph implements Serializable {
         //this.setAutoOrigin(true);
         //this.setHtmlLabels(true);
         this.nodosSueltos = new ArrayList();
+        this.lados = new ArrayList<>();
         inicializarEstilo();
     }
 
@@ -107,25 +117,41 @@ public class Grafo extends mxGraph implements Serializable {
         getModel().beginUpdate();
         Object parent = getDefaultParent();
         //mxCell lado = new mxCell(inclusion);
+        Object e1;
         if (inclusion == 1) {
-            Object e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_TOTAL);
+            e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_TOTAL);
         } else {
-            Object e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
+            e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
         }
-
+        lados.add((mxCell) e1);
         getModel().endUpdate();
     }
 
-    public Nodo buscarNodo(String nombre) throws NoEncontrado {
+    /**
+     * Busca el nodo con el String solicitado.
+     *
+     * @param stringABuscar String que se buscará en el grafo.
+     * @return Nodo encontraod.
+     * @throws NoEncontrado Lanzada cuando no hay nodos con el string.
+     */
+    public Nodo buscarNodo(String stringABuscar) throws NoEncontrado {
         Nodo nodoEncontrado = null;
         for (Nodo nodoBusqueda : nodosSueltos) {
-            if (((mxCell) nodoBusqueda.getInformacion()).getValue().equals(nombre)) {
+            if (((mxCell) nodoBusqueda.getInformacion()).getValue().equals(stringABuscar)) {
                 nodoEncontrado = nodoBusqueda;
             }
         }
         return nodoEncontrado;
     }
 
+    /**
+     * Genera un HTML mínimo con un título y texto. Título lo encierra entre h1
+     * y texto lo encierra entre p.
+     *
+     * @param titulo Título del HTML
+     * @param texto Texto en el HTML
+     * @return String generado con formato HTML
+     */
     public String generarHTML(String titulo, String texto) {
         return " <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">"
                 //                + "  <TITLE>A study of population dynamics</TITLE>"
@@ -201,6 +227,13 @@ public class Grafo extends mxGraph implements Serializable {
         hojaDeEstilos.putCellStyle(FLECHA_PARCIAL, hashEstiloFlechaParcial);
     }
 
+    /**
+     * Construye un árbol desde el grafo actual. Se cerciora de que únicamente
+     * hay una raíz y construye recursivamente vértice a vértice cada uno de los
+     * nodos.
+     *
+     * @return Árbol construido.
+     */
     public TipoDeDimension construirArbol() {
         List<mxCell> raices = obtenerRaices();
         if (raices.size() != 1) {
@@ -218,15 +251,33 @@ public class Grafo extends mxGraph implements Serializable {
         return tipoDeDimension;
     }
 
-    public void crearRaiz(String nombre, int x, int y) throws NoEncontrado {
+    /**
+     * Crea una raíz que tendrá como hijos todos los nodos raíces actuales.
+     *
+     * @param nombre Nombre de la nueva raíz
+     * @param x Posición en X de la nueva raíz.
+     * @param y Posición en Y de la nueva raíz.
+     */
+    public void crearRaiz(String nombre, int x, int y) {
         List<mxCell> raicesCrudas = obtenerRaices();
         agregarNodo(nombre, CATEGORIA, x, y);
-        for (Object raizCruda : raicesCrudas) {
-            mxCell raiz = (mxCell) raizCruda;
-            enlazarNodos(nombre, (String) raiz.getValue(), 1);
-        }
+        raicesCrudas.stream().map((raizCruda) -> (mxCell) raizCruda).forEach((raiz) -> {
+            try {
+                enlazarNodos(nombre, (String) raiz.getValue(), 1);
+            } catch (NoEncontrado ex) {
+                Logger.getLogger(Grafo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 
+    /**
+     * Costruye recursivamente los hijos para el nodo raíz.
+     *
+     * @param tipoDeDimension Árbol donde se está creando el nodo.
+     * @param tipoRaiz Tipo de dato dentro de raíz.
+     * @param raiz Vértice dónde se buscarán hijos.
+     * @throws NoEncontrado El elemento tipoRaiz no ha sido .
+     */
     private void construirRecursivo(TipoDeDimension tipoDeDimension, TipoCategoria tipoRaiz, mxCell raiz) throws NoEncontrado {
         for (int i = 0; i < raiz.getEdgeCount(); i++) {
             mxCell celda = (mxCell) raiz.getEdgeAt(i);
@@ -236,6 +287,11 @@ public class Grafo extends mxGraph implements Serializable {
         }
     }
 
+    /**
+     * Obtiene todos los nodos que no tengan padres en el grafo actual.
+     *
+     * @return Lista de todas las raíces.
+     */
     private List<mxCell> obtenerRaices() {
         List<mxCell> raices = new ArrayList<>();
         for (Nodo nodo : nodosSueltos) {

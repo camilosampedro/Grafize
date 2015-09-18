@@ -222,13 +222,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
             int input = JOptionPane.showConfirmDialog(this, "Se necesita que haya una sola raíz. ¿Crear nuevo nodo raíz?", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
             if (input == JOptionPane.OK_OPTION) {
                 String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
-                try {
-                    grafo.crearRaiz(nombre, randX(), randY());
-
-                } catch (NoEncontrado ex) {
-                    Logger.getLogger(VentanaEsquema.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                }
+                grafo.crearRaiz(nombre, randX(), randY());
             }
             return;
         }

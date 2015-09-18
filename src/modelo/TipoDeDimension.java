@@ -11,7 +11,12 @@ package modelo;
  */
 public class TipoDeDimension extends Arbol<TipoCategoria> {
 
-    public TipoDeDimension(TipoCategoria raiz) {
-        super(raiz);
+    /**
+     * Constructor que extiende la funcionalidad de Arbol.
+     *
+     * @param datoRaiz Dato que irá en la raíz.
+     */
+    public TipoDeDimension(TipoCategoria datoRaiz) {
+        super(datoRaiz);
     }
 }

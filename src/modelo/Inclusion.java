@@ -8,6 +8,7 @@ package modelo;
 /**
  *
  * @author Camilo Sampedro <camilo.sampedro@udea.edu.co>
+ * @param <T> Dato que irá en el nodo.
  */
 public class Inclusion<T> {
 
@@ -15,6 +16,13 @@ public class Inclusion<T> {
 
     private double gradoDeInclusion;
 
+    /**
+     * Crea un nuevo objeto inclusión. Define una relación con el nodo a un
+     * grado de inclusión gradoDeInclusion.
+     *
+     * @param nodo Nodo a asignar.
+     * @param gradoDeInclusion Grado de inclusión (Porcentaje), entre 0 y 1.
+     */
     public Inclusion(Nodo<T> nodo, double gradoDeInclusion) {
         this.nodo = nodo;
         this.gradoDeInclusion = gradoDeInclusion;

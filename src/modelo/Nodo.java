@@ -132,7 +132,8 @@ public class Nodo<T> {
     /**
      * Agrega un nuevo nodo a la lista de hijos.
      *
-     * @param hijo Hijo nuevo a agregar
+     * @param hijo Hijo nuevo a agregar.
+     * @param inclusion Grado de inclusión.
      */
     public void agregarHijo(Nodo<T> hijo, double inclusion) {
         this.hijos.add(new Inclusion<>(hijo, inclusion));
