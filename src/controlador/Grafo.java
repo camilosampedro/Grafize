@@ -189,7 +189,10 @@ public class Grafo extends mxGraph implements Serializable {
             return null;
         }
         mxCell raiz = (mxCell) raicesCrudas.get(0);
-        TipoDeDimension tipoDeDimension = new TipoDeDimension(new TipoCategoria((String) raiz.getValue()));
+        TipoCategoria tipoRaiz = new TipoCategoria((String) raiz.getValue());
+        TipoDeDimension tipoDeDimension = new TipoDeDimension(tipoRaiz);
+
+        construirRecursivo(tipoDeDimension, tipoRaiz, raiz);
         return tipoDeDimension;
     }
 
@@ -199,6 +202,13 @@ public class Grafo extends mxGraph implements Serializable {
         for (Object raizCruda : raicesCrudas) {
             mxCell raiz = (mxCell) raizCruda;
             enlazarNodos(nombre, (String) raiz.getValue(), 1);
+        }
+    }
+
+    private void construirRecursivo(TipoDeDimension tipoDeDimension, TipoCategoria tipoRaiz, mxCell raiz) {
+        for (int i = 0; i < raiz.getChildCount(); i++) {
+            mxCell celda = (mxCell) raiz.getChildAt(i);
+            tipoDeDimension.agregarNodo(tipoRaiz, celda.getValue(), );
         }
     }
 }
