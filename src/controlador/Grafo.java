@@ -228,9 +228,11 @@ public class Grafo extends mxGraph implements Serializable {
     }
 
     private void construirRecursivo(TipoDeDimension tipoDeDimension, TipoCategoria tipoRaiz, mxCell raiz) throws NoEncontrado {
-        for (int i = 0; i < raiz.getChildCount(); i++) {
-            mxCell celda = (mxCell) raiz.getChildAt(i);
-            tipoDeDimension.agregarNodo(tipoRaiz, new TipoCategoria((String) celda.getValue()), 1);
+        for (int i = 0; i < raiz.getEdgeCount(); i++) {
+            mxCell celda = (mxCell) raiz.getEdgeAt(i);
+            if (celda.getSource().equals(raiz)) {
+                tipoDeDimension.agregarNodo(tipoRaiz, new TipoCategoria((String) celda.getValue()), 1);
+            }
         }
     }
 
