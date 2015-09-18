@@ -14,9 +14,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import modelo.Arbol;
-import modelo.Categoria;
 import modelo.Nodo;
 import modelo.TipoCategoria;
 import modelo.TipoDeDimension;
@@ -30,18 +30,20 @@ public class Grafo extends mxGraph implements Serializable {
     /**
      * Identificador del "style" para obtener el diseño de los nodos dimensión.
      */
-    public static final String DIMENSION = "DIMENSION";
+    public static final String CATEGORIA = "CATEGORIA";
     /**
      * Identificador del "style" para obtener el diseño de los nodos hecho.
      */
     public static final String HECHO = "HECHO";
+    public static final String FLECHA_TOTAL = "FLECHAPARCIAL";
+    public static final String FLECHA_PARCIAL = "FLECHATOTAL";
 
     /**
      * Variable utilizada para evitar problemas en la serialización de la clase.
      */
     public static final long serialVersionUID = 781L;
 
-    private final List<Nodo> nodosSueltos;
+    private final List<Nodo<mxCell>> nodosSueltos;
 
     /**
      * Constructor vacío para la clase actual. Sólo inicializa el hash.
@@ -91,14 +93,25 @@ public class Grafo extends mxGraph implements Serializable {
         nodosSueltos.add(new Nodo(v1));
     }
 
-    public void enlazarNodos(String nombreNodo1, String nombreNodo2, double inclusion) throws NoEncontrado {
-        Nodo padre = buscarNodo(nombreNodo1);
-        Nodo hijo = buscarNodo(nombreNodo2);
+    /**
+     * Enlaza dos nodos de forma gráfica agregando un grado de inclusión.
+     *
+     * @param nombrePadre Nombre del nodo padre.
+     * @param nombreHijo Nombre del nodo hijo.
+     * @param inclusion Grado de inclusión.
+     * @throws NoEncontrado No se encontró uno de los dos nodos.
+     */
+    public void enlazarNodos(String nombrePadre, String nombreHijo, double inclusion) throws NoEncontrado {
+        Nodo padre = buscarNodo(nombrePadre);
+        Nodo hijo = buscarNodo(nombreHijo);
         getModel().beginUpdate();
         Object parent = getDefaultParent();
-        mxCell lado = new mxCell(inclusion);
-
-        Object e1 = insertEdge(parent, null, inclusion, padre.getInformacion(), hijo.getInformacion(), FLECHA);
+        //mxCell lado = new mxCell(inclusion);
+        if (inclusion == 1) {
+            Object e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_TOTAL);
+        } else {
+            Object e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
+        }
 
         getModel().endUpdate();
     }
@@ -174,41 +187,74 @@ public class Grafo extends mxGraph implements Serializable {
         hashEstiloDimension.put(mxConstants.STYLE_FONTCOLOR, "#084B8A");
         hashEstiloHecho.put(mxConstants.STYLE_FONTCOLOR, "#B40404");
 
-        HashMap<String, Object> hashEstiloFlecha = new HashMap<>();
-        hashEstiloFlecha.put(mxConstants.STYLE_LABEL_BACKGROUNDCOLOR, "white");
+        HashMap<String, Object> hashEstiloFlechaTotal = new HashMap<>();
 
-        hojaDeEstilos.putCellStyle(DIMENSION, hashEstiloDimension);
+        hashEstiloFlechaTotal.put(mxConstants.STYLE_LABEL_BACKGROUNDCOLOR, "white");
+
+        HashMap<String, Object> hashEstiloFlechaParcial = new HashMap<>(hashEstiloFlechaTotal);
+
+        hashEstiloFlechaParcial.put(mxConstants.STYLE_DASHED, true);
+
+        hojaDeEstilos.putCellStyle(CATEGORIA, hashEstiloDimension);
         hojaDeEstilos.putCellStyle(HECHO, hashEstiloHecho);
-        hojaDeEstilos.putCellStyle(FLECHA, hashEstiloFlecha);
+        hojaDeEstilos.putCellStyle(FLECHA_TOTAL, hashEstiloFlechaTotal);
+        hojaDeEstilos.putCellStyle(FLECHA_PARCIAL, hashEstiloFlechaParcial);
     }
-    public static final String FLECHA = "FLECHA";
 
     public TipoDeDimension construirArbol() {
-        List<Object> raicesCrudas = findTreeRoots(getDefaultParent());
-        if (raicesCrudas.size() > 1 || raicesCrudas.isEmpty()) {
+        List<mxCell> raices = obtenerRaices();
+        if (raices.size() != 1) {
             return null;
         }
-        mxCell raiz = (mxCell) raicesCrudas.get(0);
+        mxCell raiz = (mxCell) raices.get(0);
         TipoCategoria tipoRaiz = new TipoCategoria((String) raiz.getValue());
         TipoDeDimension tipoDeDimension = new TipoDeDimension(tipoRaiz);
 
-        construirRecursivo(tipoDeDimension, tipoRaiz, raiz);
+        try {
+            construirRecursivo(tipoDeDimension, tipoRaiz, raiz);
+        } catch (NoEncontrado ex) {
+            Logger.getLogger(Grafo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return tipoDeDimension;
     }
 
     public void crearRaiz(String nombre, int x, int y) throws NoEncontrado {
-        List<Object> raicesCrudas = findTreeRoots(getDefaultParent());
-        agregarNodo(nombre, DIMENSION, x, y);
+        List<mxCell> raicesCrudas = obtenerRaices();
+        agregarNodo(nombre, CATEGORIA, x, y);
         for (Object raizCruda : raicesCrudas) {
             mxCell raiz = (mxCell) raizCruda;
             enlazarNodos(nombre, (String) raiz.getValue(), 1);
         }
     }
 
-    private void construirRecursivo(TipoDeDimension tipoDeDimension, TipoCategoria tipoRaiz, mxCell raiz) {
+    private void construirRecursivo(TipoDeDimension tipoDeDimension, TipoCategoria tipoRaiz, mxCell raiz) throws NoEncontrado {
         for (int i = 0; i < raiz.getChildCount(); i++) {
             mxCell celda = (mxCell) raiz.getChildAt(i);
-            tipoDeDimension.agregarNodo(tipoRaiz, celda.getValue(), );
+            tipoDeDimension.agregarNodo(tipoRaiz, new TipoCategoria((String) celda.getValue()), 1);
         }
+    }
+
+    private List<mxCell> obtenerRaices() {
+        List<mxCell> raices = new ArrayList<>();
+        for (Nodo nodo : nodosSueltos) {
+            mxCell celda = (mxCell) nodo.getInformacion();
+            int cantidadHijos = celda.getEdgeCount();
+            if (cantidadHijos == 0) {
+                raices.add(celda);
+            } else {
+                boolean esRaiz = true;
+                for (int i = 0; i < cantidadHijos; i++) {
+                    mxCell lado = (mxCell) celda.getEdgeAt(i);
+                    if (lado.getTarget().equals(celda)) {
+                        esRaiz = false;
+                        break;
+                    }
+                }
+                if (esRaiz) {
+                    raices.add(celda);
+                }
+            }
+        }
+        return raices;
     }
 }

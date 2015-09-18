@@ -7,12 +7,9 @@ package vista;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.view.mxStylesheet;
 import controlador.Grafo;
-import controlador.MouseEventListener;
+import controlador.MouseEventEsquema;
 import exception.NoEncontrado;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -43,13 +40,18 @@ public class VentanaEsquema extends javax.swing.JFrame {
      */
     private mxCell celda;
 
+    private static Object[] opciones = {
+        "Parcial",
+        "Total"
+    };
+
     /**
      * Crea una nueva ventana de grafo vacío.
      */
     public VentanaEsquema() {
         grafo = new Grafo();
         initComponents();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
+        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
     }
 
     /**
@@ -60,7 +62,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
     public VentanaEsquema(Grafo grafo) {
         this.grafo = grafo;
         initComponents();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
+        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
     }
 
     /**
@@ -196,7 +198,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
     private void btnAgregarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCategoriaActionPerformed
         // TODO add your handling code here:
-        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.DIMENSION, randX(), randY());
+        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.CATEGORIA, randX(), randY());
         tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarCategoriaActionPerformed
 
@@ -222,8 +224,10 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
                 try {
                     grafo.crearRaiz(nombre, randX(), randY());
+
                 } catch (NoEncontrado ex) {
-                    Logger.getLogger(VentanaEsquema.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(VentanaEsquema.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             return;
@@ -244,18 +248,28 @@ public class VentanaEsquema extends javax.swing.JFrame {
             if (celda.equals((mxCell) grafo.getSelectionCell())) {
                 return;
             }
-            String insercion = JOptionPane.showInputDialog(this, "Por favor, ingrese el grado de inclusión");
+            int insercion = JOptionPane.showOptionDialog(this,
+                    "Would you like some green eggs to go "
+                    + "with that ham?",
+                    "A Silly Question",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]);
             try {
-                double gradoInclusion = Double.parseDouble(insercion);
+                double gradoInclusion = insercion;
                 if (gradoInclusion < 0 || gradoInclusion > 1) {
-                    JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
+//                    JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 grafo.enlazarNodos((String) celda.getValue(), (String) ((mxCell) grafo.getSelectionCell()).getValue(), gradoInclusion);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese un número en el formato #.##", "Error", JOptionPane.ERROR_MESSAGE);
+
             } catch (NoEncontrado ex) {
-                Logger.getLogger(VentanaEsquema.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(VentanaEsquema.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnConectarActionPerformed
@@ -274,10 +288,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaEsquema.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaEsquema.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

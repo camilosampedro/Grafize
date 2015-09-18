@@ -14,20 +14,22 @@ import javax.swing.SwingUtilities;
  *
  * @author Camilo Sampedro
  */
-public class MouseEventListener extends MouseAdapter {
+public class MouseEventEsquema extends MouseAdapter {
 
     private final Grafo grafo;
 
     /**
      * Constructor.
+     *
      * @param grafo Grafo al que se le agregará el controlador.
      */
-    public MouseEventListener(Grafo grafo) {
+    public MouseEventEsquema(Grafo grafo) {
         this.grafo = grafo;
     }
 
     /**
      * Controlador para cuando se hace clic sobre el grafo.
+     *
      * @param e Evento.
      */
     @Override
@@ -35,12 +37,12 @@ public class MouseEventListener extends MouseAdapter {
         // Si es un doble clic.
         if (e.getClickCount() == 2) {
             // Solicita el nombre que irá en el nodo.
-            String nombre = JOptionPane.showInputDialog(null, "Por favor ingrese el nombre", "Ingresar nombre", JOptionPane.QUESTION_MESSAGE);
-            if (SwingUtilities.isRightMouseButton(e)) {
-                grafo.agregarNodo(nombre, Grafo.HECHO, e.getX(), e.getY());
-            } else {
-                grafo.agregarNodo(nombre, Grafo.DIMENSION, e.getX(), e.getY());
-            }
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                String nombre = JOptionPane.showInputDialog(null, "Por favor ingrese el nombre", "Ingresar nombre", JOptionPane.QUESTION_MESSAGE);
+                grafo.agregarNodo(nombre, Grafo.CATEGORIA, e.getX(), e.getY());
+            } //else {
+//                grafo.agregarNodo(nombre, Grafo.DIMENSION, e.getX(), e.getY());
+//            }
 
         }
     }

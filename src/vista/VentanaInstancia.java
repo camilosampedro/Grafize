@@ -10,7 +10,7 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxStylesheet;
 import controlador.Grafo;
-import controlador.MouseEventListener;
+import controlador.MouseEventEsquema;
 import java.util.HashMap;
 
 /**
@@ -45,7 +45,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
         grafo = new Grafo();
         initComponents();
         inicializarEstilo();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
+        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
     }
 
     /**
@@ -57,7 +57,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
         this.grafo = grafo;
         initComponents();
         inicializarEstilo();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventListener(grafo));
+        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
     }
 
     /**
@@ -183,7 +183,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
 
     private void btnAgregarDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarDimensionActionPerformed
         // TODO add your handling code here:
-        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.DIMENSION, randX(), randY());
+        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.CATEGORIA, randX(), randY());
         tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarDimensionActionPerformed
 
@@ -272,7 +272,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
         hashEstiloHecho.put(mxConstants.STYLE_FONTCOLOR, "#B40404");
         //  
 
-        hojaDeEstilos.putCellStyle(Grafo.DIMENSION, hashEstiloDimension);
+        hojaDeEstilos.putCellStyle(Grafo.CATEGORIA, hashEstiloDimension);
         hojaDeEstilos.putCellStyle(Grafo.HECHO, hashEstiloHecho);
     }
 
