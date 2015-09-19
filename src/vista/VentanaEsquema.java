@@ -83,7 +83,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         tfIngresadorNombre = new javax.swing.JTextField();
         btnAgregarHecho = new javax.swing.JButton();
         btnConectar = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
+        btnFinalizarEsquema = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuGrafo = new javax.swing.JMenu();
         btnMenuMakeOnto = new javax.swing.JMenuItem();
@@ -133,7 +133,12 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Finalizar esquema");
+        btnFinalizarEsquema.setText("Finalizar esquema");
+        btnFinalizarEsquema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarEsquemaActionPerformed(evt);
+            }
+        });
 
         menuGrafo.setText("Grafo");
 
@@ -180,7 +185,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(btnFinalizarEsquema)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -199,7 +204,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConectar)
-                    .addComponent(jButton1))
+                    .addComponent(btnFinalizarEsquema))
                 .addContainerGap())
         );
 
@@ -227,19 +232,11 @@ public class VentanaEsquema extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.HECHO, randX(), randY());
 //        tfIngresadorNombre.setText("");
-        TipoDeDimension tipoDeDimension = grafo.construirArbol();
-        if (tipoDeDimension == null) {
-            int input = JOptionPane.showConfirmDialog(this, "Se necesita que haya una sola raíz. ¿Crear nuevo nodo raíz?", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (input == JOptionPane.OK_OPTION) {
-                String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
-                grafo.crearRaiz(nombre, randX(), randY());
-            }
-            return;
+        if (guardarTipoDeDimension()) {
+            VentanaEsquema ventanaNueva = new VentanaEsquema();
+            ventanaNueva.setVisible(true);
+            this.dispose();
         }
-        Esquema.agregarTipoDimension(tipoDeDimension);
-        VentanaEsquema ventanaNueva = new VentanaEsquema();
-        ventanaNueva.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_btnAgregarHechoActionPerformed
 
     private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarActionPerformed
@@ -277,6 +274,15 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnConectarActionPerformed
+
+    private void btnFinalizarEsquemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarEsquemaActionPerformed
+        // TODO add your handling code here:
+        if (guardarTipoDeDimension()) {
+            VentanaInstancia ventanaNueva = new VentanaInstancia();
+            ventanaNueva.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnFinalizarEsquemaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -341,9 +347,9 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarHecho;
     private javax.swing.JToggleButton btnConectar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnFinalizarEsquema;
     private javax.swing.JMenuItem btnMenuMakeCovering;
     private javax.swing.JMenuItem btnMenuMakeOnto;
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
@@ -353,5 +359,19 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private javax.swing.JPanel panelGrafo;
     private javax.swing.JTextField tfIngresadorNombre;
     // End of variables declaration//GEN-END:variables
+
+    private boolean guardarTipoDeDimension() {
+        TipoDeDimension tipoDeDimension = grafo.construirArbol();
+        if (tipoDeDimension == null) {
+            int input = JOptionPane.showConfirmDialog(this, "Se necesita que haya una sola raíz. ¿Crear nuevo nodo raíz?", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+            if (input == JOptionPane.OK_OPTION) {
+                String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
+                grafo.crearRaiz(nombre, randX(), randY());
+            }
+            return false;
+        }
+        Esquema.agregarTipoDimension(tipoDeDimension);
+        return true;
+    }
 
 }
