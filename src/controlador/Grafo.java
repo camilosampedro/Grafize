@@ -179,6 +179,11 @@ public class Grafo extends mxGraph implements Serializable {
         return false;
     }
 
+    @Override
+    public boolean isCellEditable(Object cell) {
+        return false;
+    }
+
     /**
      * Inicializa los estilos para los nuevos nodos ingresados al grafo. (Forma,
      * colores, editabilidad, espaciado, ...). El estilo se guardará como

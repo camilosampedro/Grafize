@@ -53,4 +53,8 @@ public class Esquema {
         Esquema.tipoDeHechos = tipoDeHechos;
     }
 
+    public static void agregarTipoDimension(TipoDeDimension nuevoTipoDeDimension) {
+        tiposDeDimensiones.add(nuevoTipoDeDimension);
+    }
+
 }

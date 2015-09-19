@@ -5,6 +5,8 @@
  */
 package main;
 
+import javax.swing.JOptionPane;
+import modelo.Esquema;
 import vista.VentanaEsquema;
 
 /**
@@ -18,6 +20,11 @@ public class Main {
      */
     public static void main(String[] argumentos) {
         // TODO code application logic here
+        String input = JOptionPane.showInputDialog(null, "Por favor, ingrese el tipo de hechos "
+                + "que se ingresarán en el modelo.\n"
+                + "Por ejemplo: \"venta\" o \"siniestro\" (Sin comillas)",
+                "Ingresar tipo de hechos", JOptionPane.QUESTION_MESSAGE);
+        Esquema.setTipoDeHechos(input);
         VentanaEsquema ventana = new VentanaEsquema();
         ventana.setVisible(true);
     }

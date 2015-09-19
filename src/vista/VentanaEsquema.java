@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Arbol;
+import modelo.Esquema;
+import modelo.TipoDeDimension;
 
 /**
  *
@@ -81,6 +83,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         tfIngresadorNombre = new javax.swing.JTextField();
         btnAgregarHecho = new javax.swing.JButton();
         btnConectar = new javax.swing.JToggleButton();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuGrafo = new javax.swing.JMenu();
         btnMenuMakeOnto = new javax.swing.JMenuItem();
@@ -130,6 +133,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Finalizar esquema");
+
         menuGrafo.setText("Grafo");
 
         btnMenuMakeOnto.setText("Make onto");
@@ -162,7 +167,6 @@ public class VentanaEsquema extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConectar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -172,13 +176,17 @@ public class VentanaEsquema extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlNombre)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfIngresadorNombre)))
+                        .addComponent(tfIngresadorNombre))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addComponent(panelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfIngresadorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -189,7 +197,9 @@ public class VentanaEsquema extends javax.swing.JFrame {
                     .addComponent(btnEliminar)
                     .addComponent(btnAgregarHecho))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnConectar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConectar)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
 
@@ -217,8 +227,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.HECHO, randX(), randY());
 //        tfIngresadorNombre.setText("");
-        Arbol arbol = grafo.construirArbol();
-        if (arbol == null) {
+        TipoDeDimension tipoDeDimension = grafo.construirArbol();
+        if (tipoDeDimension == null) {
             int input = JOptionPane.showConfirmDialog(this, "Se necesita que haya una sola raíz. ¿Crear nuevo nodo raíz?", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
             if (input == JOptionPane.OK_OPTION) {
                 String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
@@ -226,6 +236,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
             return;
         }
+        Esquema.agregarTipoDimension(tipoDeDimension);
         VentanaEsquema ventanaNueva = new VentanaEsquema();
         ventanaNueva.setVisible(true);
         this.dispose();
@@ -243,9 +254,8 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 return;
             }
             int insercion = JOptionPane.showOptionDialog(this,
-                    "Would you like some green eggs to go "
-                    + "with that ham?",
-                    "A Silly Question",
+                    "Ingrese el nombre del tipo de categoría nuevo",
+                    "Nombre",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
@@ -333,6 +343,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JMenuItem btnMenuMakeCovering;
     private javax.swing.JMenuItem btnMenuMakeOnto;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
