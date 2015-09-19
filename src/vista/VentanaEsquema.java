@@ -13,7 +13,6 @@ import exception.NoEncontrado;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import modelo.Arbol;
 import modelo.Esquema;
 import modelo.TipoDeDimension;
 
@@ -81,7 +80,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         jlNombre = new javax.swing.JLabel();
         tfIngresadorNombre = new javax.swing.JTextField();
-        btnAgregarHecho = new javax.swing.JButton();
+        btnAgregarTipoDimension = new javax.swing.JButton();
         btnConectar = new javax.swing.JToggleButton();
         btnFinalizarEsquema = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -119,10 +118,10 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
         jlNombre.setText("Nombre:");
 
-        btnAgregarHecho.setText("Agregar nuevo tipo dimensión");
-        btnAgregarHecho.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarTipoDimension.setText("Agregar nuevo tipo dimensión");
+        btnAgregarTipoDimension.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarHechoActionPerformed(evt);
+                btnAgregarTipoDimensionActionPerformed(evt);
             }
         });
 
@@ -175,7 +174,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAgregarHecho)
+                        .addComponent(btnAgregarTipoDimension)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -200,7 +199,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregarCategoria)
                     .addComponent(btnEliminar)
-                    .addComponent(btnAgregarHecho))
+                    .addComponent(btnAgregarTipoDimension))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConectar)
@@ -228,7 +227,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         ventana.setVisible(true);
     }//GEN-LAST:event_btnMenuMakeOntoActionPerformed
 
-    private void btnAgregarHechoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarHechoActionPerformed
+    private void btnAgregarTipoDimensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTipoDimensionActionPerformed
         // TODO add your handling code here:
 //        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.HECHO, randX(), randY());
 //        tfIngresadorNombre.setText("");
@@ -237,7 +236,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
             ventanaNueva.setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_btnAgregarHechoActionPerformed
+    }//GEN-LAST:event_btnAgregarTipoDimensionActionPerformed
 
     private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarActionPerformed
         // TODO add your handling code here:
@@ -344,7 +343,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCategoria;
-    private javax.swing.JButton btnAgregarHecho;
+    private javax.swing.JButton btnAgregarTipoDimension;
     private javax.swing.JToggleButton btnConectar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnFinalizarEsquema;

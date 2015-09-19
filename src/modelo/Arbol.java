@@ -65,6 +65,9 @@ public class Arbol<T> {
      * caso contrario.
      */
     private Boolean existeRecursivo(Nodo nodo, Nodo<T> dato) {
+        if (dato.equals(nodo)) {
+            return true;
+        }
         for (Iterator it = nodo.hijos.iterator(); it.hasNext();) {
             Nodo<T> hijo = (Nodo<T>) it.next();
             if (hijo == dato) {
@@ -118,6 +121,9 @@ public class Arbol<T> {
      * @return Nodo encontrado o null en caso contrario.
      */
     protected Nodo<T> obtenerNodoRecursivo(Nodo actual, Object dato) {
+        if (actual.getInformacion().equals(dato)) {
+            return actual;
+        }
         for (Iterator it = actual.hijos.iterator(); it.hasNext();) {
             Nodo<T> hijo = (Nodo<T>) it.next();
             if (hijo.equals(dato)) {

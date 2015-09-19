@@ -15,7 +15,7 @@ public class Esquema {
 
     private static String tipoDeHechos;
 
-    private static ArrayList<TipoDeDimension> tiposDeDimensiones;
+    private static ArrayList<TipoDeDimension> tiposDeDimensiones = new ArrayList();
 
     /**
      * Get the value of tiposDeDimensiones
