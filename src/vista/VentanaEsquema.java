@@ -277,8 +277,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
     private void btnFinalizarEsquemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarEsquemaActionPerformed
         // TODO add your handling code here:
         if (guardarTipoDeDimension()) {
-            VentanaInstancia ventanaNueva = new VentanaInstancia();
-            ventanaNueva.setVisible(true);
+            controlador.ControladorInstancias.iniciarInstancias();
             this.dispose();
         }
     }//GEN-LAST:event_btnFinalizarEsquemaActionPerformed

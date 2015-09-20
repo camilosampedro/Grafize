@@ -23,7 +23,7 @@ public class Esquema {
      *
      * @return the value of tiposDeDimensiones
      */
-    public static ArrayList getTiposDeDimensiones() {
+    public static ArrayList<TipoDeDimension> getTiposDeDimensiones() {
         return tiposDeDimensiones;
     }
 

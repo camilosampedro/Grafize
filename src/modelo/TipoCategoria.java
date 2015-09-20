@@ -62,4 +62,9 @@ public class TipoCategoria {
         return Objects.equals(this.nombreCategoria, other.nombreCategoria);
     }
 
+    @Override
+    public String toString() {
+        return nombreCategoria;
+    }
+
 }

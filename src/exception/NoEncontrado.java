@@ -20,7 +20,7 @@ public class NoEncontrado extends Exception {
      * @param dato Dato no encontrado.
      */
     public NoEncontrado(Object dato) {
-        super("No encontrado" + dato);
+        super("No encontrado: " + dato);
         this.dato = dato;
     }
 }

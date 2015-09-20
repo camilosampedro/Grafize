@@ -1,6 +1,7 @@
 package modelo;
 
 import exception.NoEncontrado;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -155,5 +156,23 @@ public class Arbol<T> {
      */
     public void eliminar(T dato) throws NoEncontrado {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Retorna todos los elementos del árbol como un arreglo.
+     *
+     * @return Arreglo de todos los elementos dentro del árbol
+     */
+    public ArrayList<T> getAll() {
+        ArrayList<T> lista = new ArrayList();
+        getAllRecursivo(lista, raiz);
+        return lista;
+    }
+
+    private void getAllRecursivo(ArrayList<T> lista, Nodo<T> nodoActual) {
+        lista.add(nodoActual.getInformacion());
+        nodoActual.getHijos().stream().forEach((nodo) -> {
+            getAllRecursivo(lista, nodo.getNodo());
+        });
     }
 }

@@ -24,6 +24,9 @@ public class Main {
                 + "que se ingresarán en el modelo.\n"
                 + "Por ejemplo: \"venta\" o \"siniestro\" (Sin comillas)",
                 "Ingresar tipo de hechos", JOptionPane.QUESTION_MESSAGE);
+        if (input == null) {
+            return;
+        }
         Esquema.setTipoDeHechos(input);
         VentanaEsquema ventana = new VentanaEsquema();
         ventana.setVisible(true);

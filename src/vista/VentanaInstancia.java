@@ -8,12 +8,15 @@ package vista;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import controlador.Grafo;
-import controlador.MouseEventEsquema;
+import controlador.MouseEventInstancia;
 import exception.NoEncontrado;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Arbol;
+import modelo.TipoCategoria;
+import modelo.TipoDeDimension;
 
 /**
  *
@@ -44,14 +47,15 @@ public class VentanaInstancia extends javax.swing.JFrame {
         "Parcial",
         "Total"
     };
+    private TipoDeDimension tipoDeDimension;
 
     /**
      * Crea una nueva ventana de grafo vacío.
      */
-    public VentanaInstancia() {
+    private VentanaInstancia() {
         grafo = new Grafo();
         initComponents();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
+        graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
     }
 
     /**
@@ -59,10 +63,17 @@ public class VentanaInstancia extends javax.swing.JFrame {
      *
      * @param grafo Grafo a imprimir.
      */
-    public VentanaInstancia(Grafo grafo) {
+    private VentanaInstancia(Grafo grafo) {
         this.grafo = grafo;
         initComponents();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
+        graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
+    }
+
+    public VentanaInstancia(TipoDeDimension tipoDeDimensionActual) {
+        grafo = new Grafo();
+        this.tipoDeDimension = tipoDeDimensionActual;
+        initComponents();
+        graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
     }
 
     /**
@@ -84,7 +95,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
         btnAgregarHecho = new javax.swing.JButton();
         btnConectar = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jlTiposDeCategoria = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuGrafo = new javax.swing.JMenu();
@@ -142,12 +153,12 @@ public class VentanaInstancia extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+        jlTiposDeCategoria.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = construirStrings();
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jlTiposDeCategoria);
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -201,7 +212,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -366,6 +377,13 @@ public class VentanaInstancia extends javax.swing.JFrame {
         return (int) (Math.random() * (panelGrafo.getSize().height - 150));
     }
 
+    String[] construirStrings() {
+        ArrayList<String> strings = new ArrayList();
+        tipoDeDimension.getAll().stream().forEach((tipoCategoria) -> {
+            strings.add(tipoCategoria.getNombreCategoria());
+        });
+        return strings.toArray(new String[strings.size()]);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCategoria;
@@ -375,7 +393,6 @@ public class VentanaInstancia extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnMenuMakeCovering;
     private javax.swing.JMenuItem btnMenuMakeOnto;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList jList1;
     private javax.swing.JList jList2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -383,6 +400,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel jlNombre;
+    private javax.swing.JList jlTiposDeCategoria;
     private javax.swing.JMenu menuEdicion;
     private javax.swing.JMenu menuGrafo;
     private javax.swing.JPanel panelGrafo;

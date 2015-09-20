@@ -123,6 +123,7 @@ public class Grafo extends mxGraph implements Serializable {
         } else {
             e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
         }
+        padre.agregarHijo(hijo, inclusion);
         lados.add((mxCell) e1);
         getModel().endUpdate();
     }
@@ -287,7 +288,12 @@ public class Grafo extends mxGraph implements Serializable {
         for (int i = 0; i < raiz.getEdgeCount(); i++) {
             mxCell celda = (mxCell) raiz.getEdgeAt(i);
             if (celda.getSource().equals(raiz)) {
-                tipoDeDimension.agregarNodo(tipoRaiz, new TipoCategoria((String) celda.getValue()), 1);
+                TipoCategoria tipoActual = new TipoCategoria((String) celda.getSource().getValue());
+                Nodo nodo = buscarNodo(tipoActual.toString());
+                mxCell celdaObjetivo = (mxCell) celda.getTarget();
+                String objetivo = (String) celdaObjetivo.getValue();
+                tipoDeDimension.agregarNodo(tipoActual, new TipoCategoria(objetivo), nodo.buscarInclusion(objetivo));
+                construirRecursivo(tipoDeDimension, tipoActual, (mxCell) celda.getTarget());
             }
         }
     }
