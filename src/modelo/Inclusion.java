@@ -6,6 +6,8 @@
 package modelo;
 
 /**
+ * Clase donde se almacenará una relación con un nodo a cierto grado de
+ * inclusión.
  *
  * @author Camilo Sampedro <camilo.sampedro@udea.edu.co>
  * @param <T> Dato que irá en el nodo.

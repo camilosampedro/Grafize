@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
- * @author camilo
+ * 
+ * @author Camilo Sampedro <camilo.sampedro@udea.edu.co>
  * @param <T> Tipo de informacion almacenada en el nodo
  */
 public class Nodo<T> {

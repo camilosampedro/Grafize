@@ -8,6 +8,7 @@ package modelo;
 import java.util.ArrayList;
 
 /**
+ * Clase donde se almacenarán los datos del esquema (Primera parte del modelo).
  *
  * @author Camilo Sampedro <camilo.sampedro@udea.edu.co>
  */
