@@ -51,7 +51,9 @@ public class TipoCategoria {
         return nombreCategoria;
     }
     public void InsertarNodo(String Nodo){
-        Instancias.add(new NodoInstancia(Nodo));
+        NodoInstancia nuevo =new NodoInstancia(Nodo);
+        nuevo.setNombreCategoria(nombreCategoria);
+        Instancias.add(nuevo);
     }
 
     /**
