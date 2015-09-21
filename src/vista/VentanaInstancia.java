@@ -8,6 +8,7 @@ package vista;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import controlador.Grafo;
+import controlador.GrafoInstancia;
 import controlador.MouseEventInstancia;
 import exception.NoEncontrado;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
      * Crea una nueva ventana de grafo vacío.
      */
     private VentanaInstancia() {
-        grafo = new Grafo();
+        grafo = new GrafoInstancia();
         initComponents();
         graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
     }
@@ -70,7 +71,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
     }
 
     public VentanaInstancia(TipoDeDimension tipoDeDimensionActual) {
-        grafo = new Grafo();
+        grafo = new GrafoInstancia();
         this.tipoDeDimension = tipoDeDimensionActual;
         initComponents();
         graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
@@ -197,7 +198,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnConectar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAgregarHecho)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

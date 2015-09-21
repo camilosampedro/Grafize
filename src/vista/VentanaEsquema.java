@@ -8,6 +8,7 @@ package vista;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import controlador.Grafo;
+import controlador.GrafoEsquema;
 import controlador.MouseEventEsquema;
 import exception.NoEncontrado;
 import java.util.logging.Level;
@@ -50,7 +51,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
      * Crea una nueva ventana de grafo vacío.
      */
     public VentanaEsquema() {
-        grafo = new Grafo();
+        grafo = new GrafoEsquema();
         initComponents();
         graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
     }

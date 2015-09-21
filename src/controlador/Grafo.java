@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import modelo.Nodo;
 import modelo.TipoCategoria;
 import modelo.TipoDeDimension;
@@ -25,7 +24,7 @@ import modelo.TipoDeDimension;
  *
  * @author Camilo Sampedro
  */
-public class Grafo extends mxGraph implements Serializable {
+public abstract class Grafo extends mxGraph implements Serializable {
 
     /**
      * Identificador del "style" para obtener el diseño de los nodos dimensión.
@@ -51,8 +50,8 @@ public class Grafo extends mxGraph implements Serializable {
      */
     public static final long serialVersionUID = 781L;
 
-    private final ArrayList<Nodo<mxCell>> nodosSueltos;
-    private final ArrayList<mxCell> lados;
+    protected final ArrayList<Nodo<mxCell>> nodosSueltos;
+    protected final ArrayList<mxCell> lados;
 
     /**
      * Constructor vacío para la clase actual. Sólo inicializa el hash.
@@ -69,16 +68,6 @@ public class Grafo extends mxGraph implements Serializable {
     }
 
     /**
-     * Elimina todos los nodos que se encuentren seleccionados.
-     */
-    public void eliminarNodosSeleccionados() {
-        for (Object celda : getSelectionCells()) {
-            getModel().remove(celda);
-            eliminar(((mxCell) celda).getValue());
-        }
-    }
-
-    /**
      * Agregar nodo al grafo.
      *
      * @param texto Texto que irá en el nodo del grafo.
@@ -86,22 +75,7 @@ public class Grafo extends mxGraph implements Serializable {
      * @param x Posición en el eje x del nodo.
      * @param y Posición en el eje y del nodo.
      */
-    public void agregarNodo(String texto, String tipo, int x, int y) {
-        if ("".equals(texto.replaceAll("\\s", ""))) {
-            JOptionPane.showMessageDialog(null, "Por favor ingrese un nombre para el nuevo nodo", "Nombre vacío", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (existe(texto)) {
-            JOptionPane.showMessageDialog(null, "El nodo ya existe, por favor ingrese un nombre único", "Ya existe", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        getModel().beginUpdate();
-        Object parent = getDefaultParent();
-        Object v1 = insertVertex(parent, texto, texto,
-                x, y, 100, 60, tipo);
-        getModel().endUpdate();
-        nodosSueltos.add(new Nodo(v1));
-    }
+    public abstract void agregarNodo(String texto, String tipo, int x, int y);
 
     /**
      * Enlaza dos nodos de forma gráfica agregando un grado de inclusión.
@@ -111,21 +85,16 @@ public class Grafo extends mxGraph implements Serializable {
      * @param inclusion Grado de inclusión.
      * @throws NoEncontrado No se encontró uno de los dos nodos.
      */
-    public void enlazarNodos(String nombrePadre, String nombreHijo, double inclusion) throws NoEncontrado {
-        Nodo padre = buscarNodo(nombrePadre);
-        Nodo hijo = buscarNodo(nombreHijo);
-        getModel().beginUpdate();
-        Object parent = getDefaultParent();
-        //mxCell lado = new mxCell(inclusion);
-        Object e1;
-        if (inclusion == 1) {
-            e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_TOTAL);
-        } else {
-            e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
+    public abstract void enlazarNodos(String nombrePadre, String nombreHijo, double inclusion) throws NoEncontrado;
+
+    /**
+     * Elimina todos los nodos que se encuentren seleccionados.
+     */
+    public void eliminarNodosSeleccionados() {
+        for (Object celda : getSelectionCells()) {
+            getModel().remove(celda);
+            eliminar(((mxCell) celda).getValue());
         }
-        padre.agregarHijo(hijo, inclusion);
-        lados.add((mxCell) e1);
-        getModel().endUpdate();
     }
 
     /**
@@ -162,7 +131,7 @@ public class Grafo extends mxGraph implements Serializable {
                 + "  </BODY>";
     }
 
-    private boolean existe(String texto) {
+    protected boolean existe(String texto) {
         return nodosSueltos.stream().anyMatch((nodo) -> (((mxCell) nodo.getInformacion()).getValue().equals(texto)));
     }
 
