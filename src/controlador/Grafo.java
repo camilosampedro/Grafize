@@ -50,7 +50,7 @@ public abstract class Grafo extends mxGraph implements Serializable {
      */
     public static final long serialVersionUID = 781L;
 
-    protected final ArrayList<Nodo<mxCell>> nodosSueltos;
+    protected ArrayList<Nodo> nodosSueltos;
     protected final ArrayList<mxCell> lados;
 
     /**

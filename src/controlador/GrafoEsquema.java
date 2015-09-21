@@ -9,6 +9,7 @@ import com.mxgraph.model.mxCell;
 import static controlador.Grafo.FLECHA_PARCIAL;
 import static controlador.Grafo.FLECHA_TOTAL;
 import exception.NoEncontrado;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelo.Nodo;
 
@@ -17,6 +18,12 @@ import modelo.Nodo;
  * @author CamiloAndrés
  */
 public class GrafoEsquema extends Grafo {
+
+    public GrafoEsquema() {
+        super();
+        nodosSueltos = new ArrayList<>();
+    }
+
     /**
      * Agregar nodo al grafo.
      *

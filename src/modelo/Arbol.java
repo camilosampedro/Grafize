@@ -133,7 +133,7 @@ public class Arbol<T> {
             if (hijo.equals(dato)) {
                 return hijo;
             }
-            
+
             if (hijo.getInformacion().equals(dato)) {
                 return hijo;
             }
@@ -181,5 +181,13 @@ public class Arbol<T> {
         nodoActual.getHijos().stream().forEach((nodo) -> {
             getAllRecursivo(lista, nodo.getNodo());
         });
+    }
+
+    public boolean existeRelacion(T datoMayor, T datoMenor) throws NoEncontrado {
+        if (!existe(datoMayor) || !existe(datoMenor)) {
+            return false;
+        }
+        Nodo nodoActual = obtenerNodo(datoMayor);
+        return existeRecursivo(nodoActual, datoMenor);
     }
 }

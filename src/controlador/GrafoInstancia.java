@@ -9,6 +9,7 @@ import com.mxgraph.model.mxCell;
 import static controlador.Grafo.FLECHA_PARCIAL;
 import static controlador.Grafo.FLECHA_TOTAL;
 import exception.NoEncontrado;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelo.Nodo;
 
@@ -20,6 +21,7 @@ public class GrafoInstancia extends Grafo {
 
     public GrafoInstancia() {
         super();
+        this.nodosSueltos = new ArrayList<>();
         this.setHtmlLabels(true);
     }
 
@@ -66,9 +68,9 @@ public class GrafoInstancia extends Grafo {
         //mxCell lado = new mxCell(inclusion);
         Object e1;
         if (inclusion == 1) {
-            e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_TOTAL);
+            e1 = insertEdge(parent, null, inclusion, padre.getInformacion(), hijo.getInformacion(), FLECHA_TOTAL);
         } else {
-            e1 = insertEdge(parent, null, "", padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
+            e1 = insertEdge(parent, null, inclusion, padre.getInformacion(), hijo.getInformacion(), FLECHA_PARCIAL);
         }
         padre.agregarHijo(hijo, inclusion);
         lados.add((mxCell) e1);
