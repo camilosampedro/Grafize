@@ -25,21 +25,22 @@ public class Instancia {
 
     }
 
-    public void InsertarNodo(String categoriaHijo, String NombreHijo, int GradoInclusion) {
-        NodoInstancia hijo = new NodoInstancia(NombreHijo);
-        hijo.setGradoInclusion(GradoInclusion);
-        TipoCategoria CatHijo = BuscarCategoria(categoriaHijo);
-        if (CatHijo != null) {
+    
+    public void InsertarNodo(String categoriaHijo,String NombreHijo){
+        NodoInstancia hijo=new NodoInstancia(NombreHijo);
+        
+        TipoCategoria CatHijo=BuscarCategoria(categoriaHijo);
+        if(CatHijo!=null){
             CatHijo.InsertarNodo(hijo);
         }
 
     }
 
-    public void InsertarPadre(String categoriaHijo, String nombreHijo, String categoriaPadre, String nombrePadre) {
+    public void InsertarPadre(String categoriaHijo, String nombreHijo, String categoriaPadre, String nombrePadre,double gradoInclu) {
         NodoInstancia hijo = BuscarNodo(categoriaHijo, nombreHijo);
         NodoInstancia padre = BuscarNodo(categoriaPadre, nombrePadre);
         hijo.setPadre(padre);
-        padre.getHijos().add(hijo);
+        padre.getHijos().add(new Inclusion1(hijo,gradoInclu));
 
     }
 
@@ -66,5 +67,55 @@ public class Instancia {
         }
         return null;
 
+    }
+    public void MakeOnto(){
+        
+        int numCategorias=vector.size();
+        int contHijosArtificiales = 0;
+        for(TipoCategoria indiceCat: vector){
+            int indice =vector.indexOf(indiceCat);
+            for(NodoInstancia indiceNod: indiceCat.getInstancias()){
+                if((!indiceNod.getHijos().isEmpty()&& indice<numCategorias-1)){
+                    String Nombre=vector.get(indice+1).getNombreCategoria() +"_OntoArt_"+contHijosArtificiales;
+                    NodoInstancia hijoArtificial = new NodoInstancia(Nombre);
+                    vector.get(indice+1).InsertarNodo(hijoArtificial);
+                    indiceNod.getHijos().add(new Inclusion1(hijoArtificial,1));
+                    hijoArtificial.setPadre(indiceNod);
+                    contHijosArtificiales++;
+                }
+                
+            }
+            
+            
+        }
+    }
+    public void MakeCovering(){
+        
+        int contNodosArtificiales=0;        
+        
+        for(TipoCategoria Actual: vector){
+            int indiceActual=vector.indexOf(Actual);
+            for(NodoInstancia nodoAct: Actual.getInstancias()){
+                if(!nodoAct.getHijos().isEmpty()){
+                    for(Inclusion1 hijo: nodoAct.getHijos()){
+                        int indiceHijo=vector.indexOf(BuscarCategoria(hijo.getNodo().getNombreCategoria()));
+                        if((indiceHijo-indiceActual)>1){
+                            NodoInstancia intermedio= new NodoInstancia(vector.get(indiceActual+1).getNombreCategoria()+"_Cov_"+contNodosArtificiales);
+                            vector.get(indiceActual+1).InsertarNodo(intermedio);
+                            nodoAct.getHijos().remove(hijo);
+                            nodoAct.getHijos().add(new Inclusion1(intermedio,1));
+                            intermedio.setPadre(nodoAct);
+                            intermedio.getHijos().add(hijo);
+                            hijo.getNodo().setPadre(intermedio);
+                            contNodosArtificiales++;
+                        
+                        }
+                    }
+                }
+            }
+            
+            
+        }
+        
     }
 }

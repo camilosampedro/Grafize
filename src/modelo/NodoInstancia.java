@@ -15,18 +15,12 @@ public class NodoInstancia {
     //Nombre de la instancia ejempllo medellin, octubre, antioquia
     private String Nombre;
     private NodoInstancia Padre;
-    private ArrayList<NodoInstancia> Hijos;
-    private int GradoInclusion;
+    private ArrayList<Inclusion1> Hijos;
     //nombre de la categoria ejm ciudad, mes, departamento
     private String NombreCategoria;
 
-    public int getGradoInclusion() {
-        return GradoInclusion;
-    }
-
-    public void setGradoInclusion(int GradoInclusion) {
-        this.GradoInclusion = GradoInclusion;
-    }
+  
+   
     
 
     public String getNombreCategoria() {
@@ -42,7 +36,7 @@ public class NodoInstancia {
         this.Padre = null;
         this.Hijos = new ArrayList<>();
         this.NombreCategoria = "";
-        GradoInclusion=0;
+        
     }
 
     public NodoInstancia() {
@@ -72,11 +66,11 @@ public class NodoInstancia {
         this.Padre = Padre;
     }
 
-    public ArrayList<NodoInstancia> getHijos() {
+    public ArrayList<Inclusion1> getHijos() {
         return Hijos;
     }
 
-    public void setHijos(ArrayList<NodoInstancia> Hijos) {
+    public void setHijos(ArrayList<Inclusion1> Hijos) {
         this.Hijos = Hijos;
     }
     

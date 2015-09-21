@@ -167,6 +167,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnAgregarCategoria">
       <Properties>
+        <Property name="mnemonic" type="int" value="97"/>
         <Property name="text" type="java.lang.String" value="Agregar categor&#xed;a"/>
       </Properties>
       <Events>
@@ -175,6 +176,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnEliminar">
       <Properties>
+        <Property name="mnemonic" type="int" value="101"/>
         <Property name="text" type="java.lang.String" value="Eliminar"/>
       </Properties>
       <Events>
@@ -190,6 +192,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnAgregarHecho">
       <Properties>
+        <Property name="mnemonic" type="int" value="104"/>
         <Property name="text" type="java.lang.String" value="Agregar hecho"/>
       </Properties>
       <Events>
@@ -198,6 +201,7 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnConectar">
       <Properties>
+        <Property name="mnemonic" type="int" value="99"/>
         <Property name="text" type="java.lang.String" value="Conectar"/>
       </Properties>
       <Events>

@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Arbol;
+import modelo.Esquema;
 import modelo.TipoCategoria;
 import modelo.TipoDeDimension;
 
@@ -44,10 +45,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
      */
     private mxCell celda;
 
-    private static Object[] opciones = {
-        "Parcial",
-        "Total"
-    };
+//    private final static Object[] opciones = {"Parcial", "Total"};
     private TipoDeDimension tipoDeDimension;
 
     /**
@@ -124,6 +122,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
         //System.out.println("Size:" + panelGrafo.getSize());
         panelGrafo.add(graphComponent);
 
+        btnAgregarCategoria.setMnemonic('a');
         btnAgregarCategoria.setText("Agregar categoría");
         btnAgregarCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,6 +130,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
             }
         });
 
+        btnEliminar.setMnemonic('e');
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,6 +140,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
 
         jlNombre.setText("Nombre:");
 
+        btnAgregarHecho.setMnemonic('h');
         btnAgregarHecho.setText("Agregar hecho");
         btnAgregarHecho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +148,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
             }
         });
 
+        btnConectar.setMnemonic('c');
         btnConectar.setText("Conectar");
         btnConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,18 +268,16 @@ public class VentanaInstancia extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.HECHO, randX(), randY());
 //        tfIngresadorNombre.setText("");
-        Arbol arbol = grafo.construirArbol();
-        if (arbol == null) {
-            int input = JOptionPane.showConfirmDialog(this, "Se necesita que haya una sola raíz. ¿Crear nuevo nodo raíz?", "Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (input == JOptionPane.OK_OPTION) {
-                String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre para la nueva raíz");
-                grafo.crearRaiz(nombre, randX(), randY());
-            }
+        String nombre = tfIngresadorNombre.getText();
+        String tipo = (String) jlTiposDeCategoria.getSelectedValue();
+        if (tipo == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un tipo de categoría", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        VentanaInstancia ventanaNueva = new VentanaInstancia();
-        ventanaNueva.setVisible(true);
-        this.dispose();
+        String textoFinalNodo = "<p><strong>" + nombre + "</strong></p>"
+                + "<p><em>" + Esquema.getTipoDeHechos() + "</em></p>";
+        grafo.agregarNodo(textoFinalNodo, Grafo.HECHO, randX(), randY());
+        tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarHechoActionPerformed
 
     private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarActionPerformed
