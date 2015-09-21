@@ -25,6 +25,10 @@ public class TipoCategoria {
         this.Instancias = Instancias;
     }
 
+    public TipoCategoria() {
+        this.nombreCategoria = "";
+        this.Instancias = new ArrayList<>();
+    }
     /**
      * Constructor de un tipo de categoría sólo con el nombre. Sólo se permite
      * este constructor, no habrán categorías vacías.
@@ -34,6 +38,9 @@ public class TipoCategoria {
     public TipoCategoria(String nombreCategoria) {
         this.nombreCategoria = nombreCategoria;
     }
+
+    
+    
 
     /**
      * Get the value of nombreCategoria

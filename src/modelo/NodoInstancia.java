@@ -26,10 +26,17 @@ public class NodoInstancia {
     public void setNombreCategoria(String NombreCategoria) {
         this.NombreCategoria = NombreCategoria;
     }
-    
 
     public NodoInstancia() {
+        this.Nombre = "";
+        this.Padre = null;
+        this.Hijos = new ArrayList<>();
+        this.NombreCategoria = "";
     }
+    
+
+    
+    
 
     public String getNombre() {
         return Nombre;
