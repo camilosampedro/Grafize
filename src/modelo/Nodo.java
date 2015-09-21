@@ -36,6 +36,7 @@ public class Nodo<T> {
         this.informacion = null;
         //this.padre = null;
         this.hijos = new ArrayList<>();
+        
     }
 
     /**

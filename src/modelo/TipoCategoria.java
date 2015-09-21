@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -12,8 +13,17 @@ import java.util.Objects;
  * @author Camilo Sampedro <camilo.sampedro@udea.edu.co>
  */
 public class TipoCategoria {
-
+    //ejemplo ciudad, mes, año, depatamento
     private String nombreCategoria;
+    private ArrayList<NodoInstancia> Instancias; 
+
+    public ArrayList<NodoInstancia> getInstancias() {
+        return Instancias;
+    }
+
+    public void setInstancias(ArrayList<NodoInstancia> Instancias) {
+        this.Instancias = Instancias;
+    }
 
     /**
      * Constructor de un tipo de categoría sólo con el nombre. Sólo se permite
