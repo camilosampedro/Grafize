@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Arbol;
-import modelo.TipoCategoria;
 import modelo.TipoDeDimension;
 
 /**
@@ -243,7 +242,15 @@ public class VentanaInstancia extends javax.swing.JFrame {
 
     private void btnAgregarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCategoriaActionPerformed
         // TODO add your handling code here:
-        grafo.agregarNodo(tfIngresadorNombre.getText(), Grafo.CATEGORIA, randX(), randY());
+        String nombre = tfIngresadorNombre.getText();
+        String tipo = (String) jlTiposDeCategoria.getSelectedValue();
+        if (tipo == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un tipo de categoría", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String textoFinalNodo = "<p><strong>" + nombre + "</strong></p>"
+                + "<p><em>" + tipo + "</em></p>";
+        grafo.agregarNodo(textoFinalNodo, Grafo.CATEGORIA, randX(), randY());
         tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarCategoriaActionPerformed
 

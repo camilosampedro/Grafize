@@ -65,13 +65,13 @@ public class Arbol<T> {
      * @return true si alguno de los nodos contiene el dato buscado, false en
      * caso contrario.
      */
-    private Boolean existeRecursivo(Nodo nodo, Nodo<T> dato) {
+    private Boolean existeRecursivo(Nodo nodo, Object dato) {
         if (dato.equals(nodo)) {
             return true;
         }
         for (Iterator it = nodo.hijos.iterator(); it.hasNext();) {
-            Nodo<T> hijo = (Nodo<T>) it.next();
-            if (hijo == dato) {
+            Nodo<T> hijo = (Nodo<T>) ((Inclusion<T>) it.next()).getNodo();
+            if (hijo.equals(dato)) {
                 return true;
             }
             if (!hijo.esHoja() && existeRecursivo(hijo, dato)) {
@@ -95,6 +95,9 @@ public class Arbol<T> {
             nodoPadre = raiz;
         } else {
             nodoPadre = obtenerNodo(padre);
+            if (nodoPadre == null) {
+                throw new NoEncontrado(dato);
+            }
         }
         Nodo<T> nodoNuevo = new Nodo(dato);
         nodoPadre.agregarHijo(nodoNuevo, inclusion);
@@ -126,11 +129,11 @@ public class Arbol<T> {
             return actual;
         }
         for (Iterator it = actual.hijos.iterator(); it.hasNext();) {
-            Nodo<T> hijo = (Nodo<T>) it.next();
+            Nodo<T> hijo = (Nodo<T>) ((Inclusion<T>) it.next()).getNodo();
             if (hijo.equals(dato)) {
                 return hijo;
             }
-            if (!hijo.esHoja()) {
+            if (!hijo.esHoja() && existeRecursivo(hijo, dato)) {
                 Nodo busqueda = obtenerNodoRecursivo(hijo, dato);
                 if (busqueda != null) {
                     return busqueda;

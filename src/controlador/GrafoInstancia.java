@@ -18,6 +18,11 @@ import modelo.Nodo;
  */
 public class GrafoInstancia extends Grafo {
 
+    public GrafoInstancia() {
+        super();
+        this.setHtmlLabels(true);
+    }
+
     /**
      * Agregar nodo al grafo.
      *

@@ -72,7 +72,7 @@ public class Nodo<T> {
             return false;
         }
         if (getClass() != obj.getClass()) {
-            return false;
+            return obj.equals(this);
         }
         final Nodo<?> other = (Nodo<?>) obj;
         return Objects.equals(this.getInformacion(), other.getInformacion());

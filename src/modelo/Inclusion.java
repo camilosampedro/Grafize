@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import java.util.Objects;
+
 /**
  * Clase donde se almacenará una relación con un nodo a cierto grado de
  * inclusión.
@@ -64,6 +66,28 @@ public class Inclusion<T> {
      */
     public void setNodo(Nodo<T> nodo) {
         this.nodo = nodo;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.nodo);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Inclusion<?> other = (Inclusion<?>) obj;
+        if (!Objects.equals(this.nodo, other.nodo)) {
+            return false;
+        }
+        return true;
     }
 
 }
