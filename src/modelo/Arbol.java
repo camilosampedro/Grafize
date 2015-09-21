@@ -133,7 +133,11 @@ public class Arbol<T> {
             if (hijo.equals(dato)) {
                 return hijo;
             }
-            if (!hijo.esHoja() && existeRecursivo(hijo, dato)) {
+            
+            if (hijo.getInformacion().equals(dato)) {
+                return hijo;
+            }
+            if (!hijo.esHoja()) {
                 Nodo busqueda = obtenerNodoRecursivo(hijo, dato);
                 if (busqueda != null) {
                     return busqueda;

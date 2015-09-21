@@ -103,6 +103,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
         //System.out.println("Size:" + panelGrafo.getSize());
         panelGrafo.add(graphComponent);
 
+        btnAgregarCategoria.setMnemonic('a');
         btnAgregarCategoria.setText("Agregar tipo cagegoría");
         btnAgregarCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,6 +111,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
+        btnEliminar.setMnemonic('e');
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,6 +121,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
         jlNombre.setText("Nombre:");
 
+        btnAgregarTipoDimension.setMnemonic('d');
         btnAgregarTipoDimension.setText("Agregar nuevo tipo dimensión");
         btnAgregarTipoDimension.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,6 +129,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
+        btnConectar.setMnemonic('c');
         btnConectar.setText("Conectar");
         btnConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,6 +137,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
             }
         });
 
+        btnFinalizarEsquema.setMnemonic('f');
         btnFinalizarEsquema.setText("Finalizar esquema");
         btnFinalizarEsquema.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -247,7 +252,11 @@ public class VentanaEsquema extends javax.swing.JFrame {
                 btnConectar.setSelected(false);
             }
         } else {
-            if (celda.equals((mxCell) grafo.getSelectionCell())) {
+            mxCell otraCelda = (mxCell) grafo.getSelectionCell();
+            if (otraCelda == null) {
+                return;
+            }
+            if (celda.equals(otraCelda)) {
                 return;
             }
             int insercion = JOptionPane.showOptionDialog(this,
@@ -264,7 +273,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
 //                    JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                grafo.enlazarNodos((String) celda.getValue(), (String) ((mxCell) grafo.getSelectionCell()).getValue(), gradoInclusion);
+                grafo.enlazarNodos((String) celda.getValue(), (String) (otraCelda).getValue(), gradoInclusion);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese un número en el formato #.##", "Error", JOptionPane.ERROR_MESSAGE);
 

@@ -134,6 +134,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnAgregarCategoria">
       <Properties>
+        <Property name="mnemonic" type="int" value="97"/>
         <Property name="text" type="java.lang.String" value="Agregar tipo cagegor&#xed;a"/>
       </Properties>
       <Events>
@@ -142,6 +143,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnEliminar">
       <Properties>
+        <Property name="mnemonic" type="int" value="101"/>
         <Property name="text" type="java.lang.String" value="Eliminar"/>
       </Properties>
       <Events>
@@ -157,6 +159,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnAgregarTipoDimension">
       <Properties>
+        <Property name="mnemonic" type="int" value="100"/>
         <Property name="text" type="java.lang.String" value="Agregar nuevo tipo dimensi&#xf3;n"/>
       </Properties>
       <Events>
@@ -165,6 +168,7 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnConectar">
       <Properties>
+        <Property name="mnemonic" type="int" value="99"/>
         <Property name="text" type="java.lang.String" value="Conectar"/>
       </Properties>
       <Events>
@@ -173,6 +177,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnFinalizarEsquema">
       <Properties>
+        <Property name="mnemonic" type="int" value="102"/>
         <Property name="text" type="java.lang.String" value="Finalizar esquema"/>
       </Properties>
       <Events>
