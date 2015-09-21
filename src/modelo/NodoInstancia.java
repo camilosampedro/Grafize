@@ -16,8 +16,18 @@ public class NodoInstancia {
     private String Nombre;
     private NodoInstancia Padre;
     private ArrayList<NodoInstancia> Hijos;
+    private int GradoInclusion;
     //nombre de la categoria ejm ciudad, mes, departamento
     private String NombreCategoria;
+
+    public int getGradoInclusion() {
+        return GradoInclusion;
+    }
+
+    public void setGradoInclusion(int GradoInclusion) {
+        this.GradoInclusion = GradoInclusion;
+    }
+    
 
     public String getNombreCategoria() {
         return NombreCategoria;
@@ -32,6 +42,7 @@ public class NodoInstancia {
         this.Padre = null;
         this.Hijos = new ArrayList<>();
         this.NombreCategoria = "";
+        GradoInclusion=0;
     }
 
     public NodoInstancia() {

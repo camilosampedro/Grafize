@@ -25,7 +25,22 @@ public class Instancia {
         vector.add(new TipoCategoria(NombreCategoria));
 
     }
-    public void InsertarNodo(String categoriaPadre,String nombrePadre,String categoriaHijo,String NombreHijo){
+    public void InsertarNodo(String categoriaHijo,String NombreHijo,int GradoInclusion){
+        NodoInstancia hijo=new NodoInstancia(NombreHijo);
+        hijo.setGradoInclusion(GradoInclusion);
+        TipoCategoria CatHijo=BuscarCategoria(categoriaHijo);
+        if(CatHijo!=null){
+            CatHijo.InsertarNodo(hijo);
+        }
+        
+    }
+    public void InsertarPadre(String categoriaHijo,String nombreHijo,String categoriaPadre,String nombrePadre){
+        NodoInstancia hijo =BuscarNodo(categoriaHijo, nombreHijo);
+        NodoInstancia padre = BuscarNodo(categoriaPadre, nombrePadre);
+        hijo.setPadre(padre);
+        padre.getHijos().add(hijo);
+        
+        
         
     }
 
