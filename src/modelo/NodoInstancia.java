@@ -27,6 +27,13 @@ public class NodoInstancia {
         this.NombreCategoria = NombreCategoria;
     }
 
+    public NodoInstancia(String n) {
+        this.Nombre = n;
+        this.Padre = null;
+        this.Hijos = new ArrayList<>();
+        this.NombreCategoria = "";
+    }
+
     public NodoInstancia() {
         this.Nombre = "";
         this.Padre = null;

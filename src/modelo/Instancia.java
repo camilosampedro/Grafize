@@ -18,5 +18,10 @@ public class Instancia {
     public Instancia() {
         this.vector = new ArrayList<>();
     }
+    public void InsertarCategoria(String NombreCategoria){
+        vector.add(new TipoCategoria(NombreCategoria));
+        
+        
+    }
     
 }
