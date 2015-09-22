@@ -186,6 +186,11 @@ public class VentanaInstancia extends javax.swing.JFrame {
         menuGrafo.add(btnMenuMakeOnto);
 
         btnMenuMakeCovering.setText("Make covering");
+        btnMenuMakeCovering.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuMakeCoveringActionPerformed(evt);
+            }
+        });
         menuGrafo.add(btnMenuMakeCovering);
         menuGrafo.add(jSeparator1);
 
@@ -335,9 +340,17 @@ public class VentanaInstancia extends javax.swing.JFrame {
 
     private void btnMenuMakeOntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMakeOntoActionPerformed
         // TODO add your handling code here:
-        VentanaInstancia ventana = new VentanaInstancia(grafo);
+        instancia.MakeOnto();
+        VentanaFinal ventana = new VentanaFinal(tipoDeDimension, instancia);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnMenuMakeOntoActionPerformed
+
+    private void btnMenuMakeCoveringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuMakeCoveringActionPerformed
+        // TODO add your handling code here:
+        instancia.MakeCovering();
+        VentanaFinal ventana = new VentanaFinal(tipoDeDimension, instancia);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnMenuMakeCoveringActionPerformed
 
     /**
      * @param args the command line arguments

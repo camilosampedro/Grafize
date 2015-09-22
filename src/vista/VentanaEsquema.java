@@ -53,17 +53,7 @@ public class VentanaEsquema extends javax.swing.JFrame {
     public VentanaEsquema() {
         grafo = new GrafoEsquema();
         initComponents();
-        graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
-    }
 
-    /**
-     * Ventana con un grafo resultado.
-     *
-     * @param grafo Grafo a imprimir.
-     */
-    public VentanaEsquema(Grafo grafo) {
-        this.grafo = grafo;
-        initComponents();
         graphComponent.getGraphControl().addMouseListener(new MouseEventEsquema(grafo));
     }
 
@@ -87,6 +77,11 @@ public class VentanaEsquema extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Grafize - Ingresar esquema");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         panelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelGrafo.setLayout(new java.awt.GridLayout(1, 0));
@@ -254,6 +249,16 @@ public class VentanaEsquema extends javax.swing.JFrame {
             this.dispose();
         }
     }//GEN-LAST:event_btnFinalizarEsquemaActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Ingrese todos los tipos de categoría (Agregar tipo categoría).\n"
+                + "Luego puede crear enlaces entre ellos, con el botón conectar:\n"
+                + " 1. Seleccionar el primer nodo.\n"
+                + " 2. Hacer clic en \"Conectar\"\n"
+                + " 3. Seleccionar el segundo nodo.\n"
+                + " 4. Hacer clic en \"Conectar\" nuevamente e ingresar tipo de inclusión.", "Instrucciones", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
