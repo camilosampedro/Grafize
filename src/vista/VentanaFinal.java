@@ -8,6 +8,7 @@ package vista;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import controlador.Grafo;
+import controlador.GrafoEsquema;
 import controlador.GrafoInstancia;
 import controlador.MouseEventInstancia;
 import exception.NoEncontrado;
@@ -57,7 +58,7 @@ public class VentanaFinal extends javax.swing.JFrame {
      * Crea una nueva ventana de grafo vacío.
      */
     private VentanaFinal() {
-        grafo = new GrafoInstancia();
+        grafo = new GrafoEsquema();
         instancia = new Instancia();
         initComponents();
         graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
@@ -76,7 +77,7 @@ public class VentanaFinal extends javax.swing.JFrame {
     }
 
     public VentanaFinal(TipoDeDimension tipoDeDimensionActual, Instancia algoritmosAplicados) {
-        grafo = new GrafoInstancia();
+        grafo = new GrafoEsquema();
         this.tipoDeDimension = tipoDeDimensionActual;
         instancia = algoritmosAplicados;
         initComponents();
@@ -106,7 +107,7 @@ public class VentanaFinal extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jList2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Grafize - Ingresar esquema");
+        setTitle("Grafize - Resultado");
 
         panelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelGrafo.setLayout(new java.awt.GridLayout(1, 0));
