@@ -12,11 +12,15 @@ import controlador.GrafoInstancia;
 import controlador.MouseEventInstancia;
 import exception.NoEncontrado;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import modelo.Arbol;
 import modelo.Esquema;
+import modelo.Instancia;
 import modelo.TipoCategoria;
 import modelo.TipoDeDimension;
 
@@ -48,12 +52,16 @@ public class VentanaInstancia extends javax.swing.JFrame {
 //    private final static Object[] opciones = {"Parcial", "Total"};
     private TipoDeDimension tipoDeDimension;
 
+    private Instancia instancia;
+
     /**
      * Crea una nueva ventana de grafo vacío.
      */
     private VentanaInstancia() {
         grafo = new GrafoInstancia();
+        instancia = new Instancia();
         initComponents();
+
         graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
     }
 
@@ -64,14 +72,18 @@ public class VentanaInstancia extends javax.swing.JFrame {
      */
     private VentanaInstancia(Grafo grafo) {
         this.grafo = grafo;
+        instancia = new Instancia();
         initComponents();
+
         graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
     }
 
     public VentanaInstancia(TipoDeDimension tipoDeDimensionActual) {
         grafo = new GrafoInstancia();
         this.tipoDeDimension = tipoDeDimensionActual;
+        instancia = new Instancia();
         initComponents();
+
         graphComponent.getGraphControl().addMouseListener(new MouseEventInstancia(grafo));
     }
 
@@ -256,6 +268,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
         String textoFinalNodo = "<p><strong>" + nombre + "</strong></p>"
                 + "<p><em>" + tipo + "</em></p>";
         grafo.agregarNodo(textoFinalNodo, Grafo.CATEGORIA, randX(), randY());
+        instancia.InsertarNodo(tipo, nombre);
         tfIngresadorNombre.setText("");
     }//GEN-LAST:event_btnAgregarCategoriaActionPerformed
 
@@ -295,6 +308,10 @@ public class VentanaInstancia extends javax.swing.JFrame {
             if (celda.equals(otraCelda)) {
                 return;
             }
+            String nombre1 = getNombre((String) celda.getValue());
+            String tipo1 = getTipo((String) celda.getValue());
+            String nombre2 = getNombre((String) otraCelda.getValue());
+            String tipo2 = getTipo((String) celda.getValue());
             String insercion = JOptionPane.showInputDialog(this, "Ingrese el grado de inclusión\nEntre 0 y 1", "Grado de inclusión", JOptionPane.QUESTION_MESSAGE);
             try {
                 double gradoInclusion = Double.parseDouble(insercion);
@@ -302,13 +319,14 @@ public class VentanaInstancia extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                TipoCategoria tipoMayor = new TipoCategoria("");
-                TipoCategoria tipoMenor = new TipoCategoria("");
-                if (tipoDeDimension.existeRelacion(tipoMayor, tipoMenor)) {
-                    grafo.enlazarNodos((String) celda.getValue(), (String) (otraCelda).getValue(), gradoInclusion);
-                } else {
-                    JOptionPane.showMessageDialog(this, "No se puede conectar " + tipoMayor + " con " + tipoMenor + " según el esquema", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                TipoCategoria tipoMayor = new TipoCategoria(nombre1);
+                TipoCategoria tipoMenor = new TipoCategoria(nombre2);
+//                if (tipoDeDimension.existeRelacion(tipoMayor, tipoMenor)) {
+                grafo.enlazarNodos(nombre1, nombre2, gradoInclusion);
+                instancia.InsertarPadre(tipo1, nombre2, tipo2, nombre2, gradoInclusion);
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "No se puede conectar " + tipoMayor + " con " + tipoMenor + " según el esquema", "Error", JOptionPane.ERROR_MESSAGE);
+//                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese un número en el formato #.##", "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -393,6 +411,7 @@ public class VentanaInstancia extends javax.swing.JFrame {
     String[] construirStrings() {
         ArrayList<String> strings = new ArrayList();
         tipoDeDimension.getAll().stream().forEach((tipoCategoria) -> {
+            instancia.InsertarCategoria(tipoCategoria.getNombreCategoria());
             strings.add(tipoCategoria.getNombreCategoria());
         });
         return strings.toArray(new String[strings.size()]);
@@ -419,5 +438,15 @@ public class VentanaInstancia extends javax.swing.JFrame {
     private javax.swing.JPanel panelGrafo;
     private javax.swing.JTextField tfIngresadorNombre;
     // End of variables declaration//GEN-END:variables
+
+    private String getNombre(String string) {
+        String[] strings = string.split("strong>");
+        return strings[1].replace("</", "");
+    }
+
+    private String getTipo(String string) {
+        String[] strings = string.split("em>");
+        return strings[1].replace("</", "");
+    }
 
 }

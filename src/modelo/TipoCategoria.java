@@ -37,6 +37,7 @@ public class TipoCategoria {
      */
     public TipoCategoria(String nombreCategoria) {
         this.nombreCategoria = nombreCategoria;
+        this.Instancias = new ArrayList<>();
     }
 
     

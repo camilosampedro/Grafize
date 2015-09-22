@@ -2,6 +2,7 @@ package modelo;
 
 import exception.NoEncontrado;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -173,6 +174,7 @@ public class Arbol<T> {
     public ArrayList<T> getAll() {
         ArrayList<T> lista = new ArrayList();
         getAllRecursivo(lista, raiz);
+        Collections.reverse(lista);
         return lista;
     }
 
