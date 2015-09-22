@@ -308,10 +308,10 @@ public class VentanaInstancia extends javax.swing.JFrame {
             if (celda.equals(otraCelda)) {
                 return;
             }
-            String nombre1 = getNombre((String) celda.getValue());
-            String tipo1 = getTipo((String) celda.getValue());
-            String nombre2 = getNombre((String) otraCelda.getValue());
-            String tipo2 = getTipo((String) celda.getValue());
+            String nombrePadre = getNombre((String) celda.getValue());
+            String categoriaPadre = getTipo((String) celda.getValue());
+            String nombreHijo = getNombre((String) otraCelda.getValue());
+            String categoriaHijo = getTipo((String) otraCelda.getValue());
             String insercion = JOptionPane.showInputDialog(this, "Ingrese el grado de inclusión\nEntre 0 y 1", "Grado de inclusión", JOptionPane.QUESTION_MESSAGE);
             try {
                 double gradoInclusion = Double.parseDouble(insercion);
@@ -319,11 +319,11 @@ public class VentanaInstancia extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                TipoCategoria tipoMayor = new TipoCategoria(nombre1);
-                TipoCategoria tipoMenor = new TipoCategoria(nombre2);
+                TipoCategoria tipoMayor = new TipoCategoria(nombrePadre);
+                TipoCategoria tipoMenor = new TipoCategoria(nombreHijo);
 //                if (tipoDeDimension.existeRelacion(tipoMayor, tipoMenor)) {
-                grafo.enlazarNodos(nombre1, nombre2, gradoInclusion);
-                instancia.InsertarPadre(tipo1, nombre2, tipo2, nombre2, gradoInclusion);
+                grafo.enlazarNodos((String) celda.getValue(), (String) otraCelda.getValue(), gradoInclusion);
+                instancia.InsertarPadre(categoriaHijo, nombreHijo, categoriaPadre, nombrePadre, gradoInclusion);
 //                } else {
 //                    JOptionPane.showMessageDialog(this, "No se puede conectar " + tipoMayor + " con " + tipoMenor + " según el esquema", "Error", JOptionPane.ERROR_MESSAGE);
 //                }
