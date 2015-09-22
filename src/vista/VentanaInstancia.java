@@ -320,8 +320,6 @@ public class VentanaInstancia extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                TipoCategoria tipoMayor = new TipoCategoria(nombreHijo);
-                TipoCategoria tipoMenor = new TipoCategoria(nombrePadre);
 //                if (tipoDeDimension.existeRelacion(tipoMayor, tipoMenor)) {
                 grafo.enlazarNodos((String) celda.getValue(), (String) otraCelda.getValue(), gradoInclusion);
                 instancia.InsertarPadre(categoriaHijo, nombreHijo, categoriaPadre, nombrePadre, gradoInclusion);

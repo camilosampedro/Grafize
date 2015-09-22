@@ -74,7 +74,7 @@ public class Instancia {
         for (TipoCategoria indiceCat : vector) {
             int indice = vector.indexOf(indiceCat);
             for (NodoInstancia indiceNod : indiceCat.getInstancias()) {
-                if ((!indiceNod.getHijos().isEmpty() && indice < numCategorias - 1)) {
+                if ((indiceNod.getHijos().isEmpty() && indice < numCategorias - 1)) {
                     String Nombre = vector.get(indice + 1).getNombreCategoria() + "_OntoArt_" + contHijosArtificiales;
                     NodoInstancia hijoArtificial = new NodoInstancia(Nombre);
                     vector.get(indice + 1).InsertarNodo(hijoArtificial);

@@ -77,7 +77,7 @@ public class VentanaFinal extends javax.swing.JFrame {
     }
 
     public VentanaFinal(TipoDeDimension tipoDeDimensionActual, Instancia algoritmosAplicados) {
-        grafo = new GrafoEsquema();
+        grafo = new GrafoInstancia();
         this.tipoDeDimension = tipoDeDimensionActual;
         instancia = algoritmosAplicados;
         initComponents();
@@ -261,11 +261,16 @@ public class VentanaFinal extends javax.swing.JFrame {
     private void agregarTodo() {
         for (TipoCategoria tipo : instancia.getVector()) {
             for (NodoInstancia nodoInstancia : tipo.getInstancias()) {
-                grafo.agregarNodo(nodoInstancia.getNombre(), nodoInstancia.getNombreCategoria(), randX(), randY());
+                grafo.agregarNodo("<p><strong>" + nodoInstancia.getNombre() + "</strong></p>"
+                        + "<p><em>" + nodoInstancia.getNombreCategoria() + "</em></p>", Grafo.CATEGORIA, randX(), randY());
                 for (Inclusion1 inclusion : nodoInstancia.getHijos()) {
-                    grafo.agregarNodo(inclusion.getNodo().getNombre(), inclusion.getNodo().getNombreCategoria(), randX(), randY());
+                    grafo.agregarNodo("<p><strong>" + inclusion.getNodo().getNombre() + "</strong></p>"
+                            + "<p><em>" + inclusion.getNodo().getNombreCategoria() + "</em></p>", Grafo.CATEGORIA, randX(), randY());
                     try {
-                        grafo.enlazarNodos(nodoInstancia.getNombre(), inclusion.getNodo().getNombre(), inclusion.getGradoDeInclusion());
+                        grafo.enlazarNodos("<p><strong>" + nodoInstancia.getNombre() + "</strong></p>"
+                                + "<p><em>" + nodoInstancia.getNombreCategoria() + "</em></p>",
+                                "<p><strong>" + inclusion.getNodo().getNombre() + "</strong></p>"
+                                + "<p><em>" + inclusion.getNodo().getNombreCategoria() + "</em></p>", inclusion.getGradoDeInclusion());
                     } catch (NoEncontrado ex) {
                         Logger.getLogger(VentanaFinal.class.getName()).log(Level.SEVERE, null, ex);
                     }
