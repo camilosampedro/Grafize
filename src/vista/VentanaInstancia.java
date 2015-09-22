@@ -308,10 +308,10 @@ public class VentanaInstancia extends javax.swing.JFrame {
             if (celda.equals(otraCelda)) {
                 return;
             }
-            String nombrePadre = getNombre((String) celda.getValue());
-            String categoriaPadre = getTipo((String) celda.getValue());
-            String nombreHijo = getNombre((String) otraCelda.getValue());
-            String categoriaHijo = getTipo((String) otraCelda.getValue());
+            String nombreHijo = getNombre((String) celda.getValue());
+            String categoriaHijo = getTipo((String) celda.getValue());
+            String nombrePadre = getNombre((String) otraCelda.getValue());
+            String categoriaPadre = getTipo((String) otraCelda.getValue());
             String insercion = JOptionPane.showInputDialog(this, "Ingrese el grado de inclusión\nEntre 0 y 1", "Grado de inclusión", JOptionPane.QUESTION_MESSAGE);
             try {
                 double gradoInclusion = Double.parseDouble(insercion);
@@ -319,8 +319,8 @@ public class VentanaInstancia extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entre 0 y 1", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                TipoCategoria tipoMayor = new TipoCategoria(nombrePadre);
-                TipoCategoria tipoMenor = new TipoCategoria(nombreHijo);
+                TipoCategoria tipoMayor = new TipoCategoria(nombreHijo);
+                TipoCategoria tipoMenor = new TipoCategoria(nombrePadre);
 //                if (tipoDeDimension.existeRelacion(tipoMayor, tipoMenor)) {
                 grafo.enlazarNodos((String) celda.getValue(), (String) otraCelda.getValue(), gradoInclusion);
                 instancia.InsertarPadre(categoriaHijo, nombreHijo, categoriaPadre, nombrePadre, gradoInclusion);
